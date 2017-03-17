@@ -1,0 +1,15 @@
+{
+    "db_self":{
+        "host":"localhost",
+        "name":"dbnavigator",
+        "user":"root",
+        "pass":"root",
+        "prefix": ""
+    },
+    "db_target":{
+        "host":"localhost",
+        "name":"test",
+        "user":"root",
+        "pass":"root"
+    }
+}
