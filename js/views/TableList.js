@@ -4,8 +4,8 @@ var Backbone = require('backbone'),
 
 var TableList = Backbone.View.extend({
     className: 'table-list',
-    initialize: function(boardId, opts){
-        this.loadTables();
+    initialize: function(){
+
     },
 
     events: {
@@ -15,7 +15,11 @@ var TableList = Backbone.View.extend({
 
     tableClicked: function(e){
         var table = $(e.currentTarget).attr('title');
-        this.trigger('table-selected', table);
+        var event = 'table-select';
+        if(e.metaKey){// cmd
+            event = 'table-add';
+        }
+        this.trigger(event, table);
     },
 
     updateSearch: function(){
@@ -30,21 +34,20 @@ var TableList = Backbone.View.extend({
         });
     },
 
-    loadTables: function(){
-        var self = this;
-        $.getJSON('php/index.php?cmd=tables').then(function(resp){
-            self.tables = resp.tables;
-            self.addTables();
-            self.updateSearch();
-        });
+    focusSearch: function(){
+        this.$input.focus();
     },
 
-    addTables: function(){
+
+
+    setTables: function(tables){
+        this.tables = tables;
         var html = Object.keys(this.tables).map(function(tableName){
             return '<div class="table-list__table" title="'+tableName+'">'+tableName+'</div>';
         }).join('');
         this.$('.table-list__scroll').html(html);
         this.$('.table-list__tables').addClass('table-list__tables--loaded');
+        this.updateSearch();
     },
 
     render: function(){

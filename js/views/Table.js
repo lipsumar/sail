@@ -5,10 +5,11 @@ var Table = Backbone.View.extend({
     initialize: function(opts){
         this.rows = opts.rows;
         this.fields = opts.fields;
+        this.noResultMessage = typeof opts.noResultMessage === 'undefined' ? 'No result 😐' : opts.noResultMessage;
     },
     render: function(){
         if(this.rows.length === 0){
-            this.$el.html('No result 😐');
+            this.$el.html(this.noResultMessage);
         }else{
 
             var html = '<table class="table" cellpadding="0" cellspacing="0" border="0">';
@@ -21,8 +22,9 @@ var Table = Backbone.View.extend({
             html+='<tbody>';
             var fields = this.fields;
 
+            var even = true;
             this.rows.forEach(function(row){
-                html+='<tr>';
+                html+='<tr class="'+(even ? 'even' : 'odd')+'">';
                 fields.forEach(function(field){
                     var valueString = row[field] ? row[field].toString() : '';
                     /*if(valueString.length > 30){
@@ -31,6 +33,7 @@ var Table = Backbone.View.extend({
                     html+='<td>'+valueString+'</td>';
                 });
                 html+='</tr>';
+                even = !even;
             });
             html+='</tbody>';
 

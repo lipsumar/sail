@@ -5,6 +5,8 @@ var Backbone = require('backbone'),
     ResultCard = require('./ResultCard'),
     $ = require('jquery');
 
+require('jquery.hotkeys');
+
 
 var Console = Backbone.View.extend({
     className: 'console',
@@ -13,15 +15,55 @@ var Console = Backbone.View.extend({
         this.queryBox = new QueryBox();
         var queryBuilder = new QueryBuilder();
 
-        this.tableList.on('table-selected', function(table){
+        this.loadTables();
+
+
+
+        this.tableList.on('table-select', function(table){
             queryBuilder.reset();
-            var query = queryBuilder.buildSelectFromTable(table);
+            queryBuilder.addTable(table);
+            var query = queryBuilder.buildSelect();
             this.queryBox.setQuery(query);
             this.executeQuery(query);
         }.bind(this));
+
+        this.tableList.on('table-add', function(table){
+            queryBuilder.addTable(table);
+            var query = queryBuilder.buildSelect();
+            this.queryBox.setQuery(query);
+        }.bind(this));
+
+        this.on('query-select', function(query){
+            queryBuilder.reset();
+            this.queryBox.setQuery(query);
+            this.queryBox.focus();
+        }.bind(this));
+
+        this.queryBox.on('execute-query', function(query){
+            queryBuilder.reset();
+            this.executeQuery(query);
+        }.bind(this));
+
+        this.queryBox.on('focus-search', this.tableList.focusSearch.bind(this.tableList));
+
+        $(document).bind('keydown', 'meta+p', function(e){
+            e.preventDefault();
+            this.tableList.focusSearch();
+        }.bind(this));
+
+    },
+
+    loadTables: function(){
+        var self = this;
+        $.getJSON('php/index.php?cmd=tables').then(function(resp){
+            self.tables = resp.tables;
+            self.tableList.setTables(self.tables);
+            self.queryBox.setTables(self.tables);
+        });
     },
 
     executeQuery: function(query){
+        var card = this.addCard(query);
         $.ajax({
             url: 'php/index.php?cmd=query',
             method: 'post',
@@ -29,19 +71,16 @@ var Console = Backbone.View.extend({
                 query: query
             },
             dataType: 'json'
-        }).then(function(resp){
-            this.addCard(query, resp);
-        }.bind(this));
+        }).then(card.setResult.bind(card), card.setServerError.bind(card));
     },
 
-    addCard: function(query, result){
+    addCard: function(query){
         var card = new ResultCard({
-            query: query,
-            countTotal: result.countTotal,
-            rows: result.rows,
-            error: result.error
+            query: query
         });
-        this.$('.console__cards').append(card.render().el);
+        card.on('query-select', this.trigger.bind(this, 'query-select'));
+        this.$('.console__cards').prepend(card.render().el);
+        return card;
     },
 
     render: function(){

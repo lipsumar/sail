@@ -1,4 +1,4 @@
-var $ = require('jquery');
+var $ = window.jQuery = require('jquery');
 var App = require('./views/App');
 var Backbone = require('backbone');
 require('./jquery-plugins/auto-resize-input');

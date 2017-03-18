@@ -106,13 +106,17 @@ function execQuery($query){
 function countQuery($query,$sqlTree){
     global $dbTarget;
 
-	// small optimization
-	if(preg_match('/^select \\* from/i',$query)){
-		$query = preg_replace('/^select \\* from/i','select count(*) as total from',$query);
-		$res = mysql_query($query, $dbTarget);
-		$r = mysql_fetch_assoc($res);
-		return $r['total'];
-	}
+    //small security. need to handle more cases (all actually)...
+    if(preg_match('/^select \\*[\\s\\S]*?from/i',$query)){
+        $query = preg_replace('/^select \\*[\\s\\S]*?from/i','select count(*) as total from',$query);
+        $res = mysql_query($query, $dbTarget);
+        $mysql_error = mysql_error();
+        if($mysql_error){
+            return false;
+        }
+        $r = mysql_fetch_assoc($res);
+        return $r['total'];
+    }
 
 	//...so we don't end up doing this
 	$res = mysql_query($query, $dbTarget);
