@@ -72,6 +72,10 @@ button,input{
     color:#B0BEC5;
     font-size:23px;
     margin-bottom:1em;
+    fill:#B0BEC5;
+}
+.sidebar__menu a svg{
+    width:30px;
 }
 .main{
     flex:auto;

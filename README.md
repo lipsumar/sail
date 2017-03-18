@@ -28,5 +28,8 @@ CREATE TABLE IF NOT EXISTS `board` (
 
 
 ## Credits
-Logo: "sailing boat" by Jacqueline Fernandes from the Noun Project
+* Logo: "sailing boat" by Jacqueline Fernandes from the Noun Project
+* Icons:
+  * console by Vignesh Nandha Kumar from the Noun Project
+  * board by Jake Dunham from the Noun Project
 
