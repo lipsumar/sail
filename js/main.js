@@ -2,7 +2,7 @@ var $ = window.jQuery = require('jquery');
 var App = require('./views/App');
 var Backbone = require('backbone');
 require('./jquery-plugins/auto-resize-input');
-
+require('jquery.hotkeys');
 window.ace.require("ace/ext/language_tools");
 
 Backbone.emulateHTTP = true;

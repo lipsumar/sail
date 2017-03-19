@@ -15,29 +15,45 @@ var TableList = Backbone.View.extend({
 
     tableClicked: function(e){
         var table = $(e.currentTarget).attr('title');
-        var event = 'table-select';
         if(e.metaKey){// cmd
-            event = 'table-add';
+            this.trigger('table-add', table);
+        }else{
+            this.selectTable(table);
         }
-        this.trigger(event, table);
+    },
+
+    selectTable: function(table){
+        this.trigger('table-select', table);
     },
 
     updateSearch: function(){
         var q = this.$input.val();
+        var shown = 0; var t;
         this.$('.table-list__table').each(function(){
             var $el = $(this);
-            if($el.text().includes(q)){
+            var text = $el.text();
+            if(text.includes(q)){
                 $el.show();
+                shown++;
+                t = text;
             }else{
                 $el.hide();
             }
         });
+        if(shown===1){
+            this.searchIsOne = t;
+        }
     },
 
     focusSearch: function(){
         this.$input.focus();
     },
 
+    selectIfOne: function(){
+        if(this.searchIsOne){
+            this.selectTable(this.searchIsOne);
+        }
+    },
 
 
     setTables: function(tables){
@@ -60,6 +76,7 @@ var TableList = Backbone.View.extend({
         </div>`;
         this.$el.html(html);
         this.$input = this.$('input');
+        this.$input.bind('keydown', 'return', this.selectIfOne.bind(this));
         return this;
     }
 });

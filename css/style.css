@@ -77,6 +77,11 @@ button,input{
 .sidebar__menu a svg{
     width:30px;
 }
+.sidebar__menu a.active{
+    background-color:#B0BEC5;
+    fill:#607D8B;
+    color:#607D8B;
+}
 .main{
     flex:auto;
     overflow: hidden;
@@ -180,6 +185,7 @@ button,input{
     padding:1em 2em 0;
 }
 .card{
+    position: relative;
     margin-bottom:2em;
     border-radius: 2px;
     padding:0.7em 1em 0.8em 1em;
@@ -382,7 +388,16 @@ table td{
 .result-card__table{
     overflow: auto;
 }
-
+.result-card__close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #ccc;
+    font-weight: bold;
+    padding: 3px 9px;
+    cursor: pointer;
+    font-size: 18px;
+}
 .result-card table{border-right:1px solid #888;border-top:1px solid #888;font-size:0.8em;width:auto;}
 .result-card table td,
 .result-card table th{border-left:1px solid #888;border-bottom:1px solid #888;padding:3px;border-top:0}
@@ -464,6 +479,81 @@ table td{
     -o-animation: rotating 0.7s linear infinite;
     animation: rotating 0.7s linear infinite;
 }
+
+
+
+.table-context-menu{
+    position: absolute;
+    display: none;
+    font-size:0.8em;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    width: 220px;
+    overflow: hidden;
+    background-color: #607D8B;
+}
+
+
+.table-context-menu__search{
+    padding:0 10px;
+}
+.table-context-menu__search input{
+    width:100%;
+    margin:10px auto;
+    border-radius: 30px;
+    border:none;
+    font-size:1em;
+    padding:3px 5px;
+    background-color: #ECEFF1;
+    color:#263238;
+}
+.table-context-menu__selected-table{
+    background: #CFD8DC;
+    padding: 3px 10px 1px;
+    margin-bottom: 5px;
+}
+
+.table-context-menu__tables,
+.table-context-menu__fields
+{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+.table-context-menu__table,
+.table-context-menu__field
+{
+    color:#CFD8DC;
+    cursor:pointer;
+    padding:0 10px;
+    position: relative;
+}
+.table-context-menu__field{
+    padding-left:25px;
+}
+.table-context-menu__table:hover,
+.table-context-menu__field:hover
+{
+    background-color: #455A64;
+}
+.table-context-menu__primary-key{
+    position: absolute;
+    width:16px;
+    height:16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100"><g transform="translate(0,-952.36218)"><path style="color:%23CFD8DC;stroke:%23CFD8DC;fill:%23CFD8DC;enable-background:accumulate;" d="m 25,981.36218 c 7.97356,0 14.91261,4.4538 18.46875,11.00001 l 42.53125,0 10,9.00001 -13,11 -6,-6 -6,6 -6,-6 -6,6 -15.53125,0 c -3.55614,6.5462 -10.49519,11 -18.46875,11 -11.59793,0 -20.9999998,-9.4021 -20.9999998,-21 0,-11.59791 9.4020698,-21.00002 20.9999998,-21.00002 z m -8,16.00001 c -2.76141,0 -5,2.2386 -5,5.00001 0,2.7614 2.23859,5 5,5 2.76141,0 5,-2.2386 5,-5 0,-2.76141 -2.23859,-5.00001 -5,-5.00001 z" stroke="none" marker="none" visibility="visible" display="inline" overflow="visible"/></g></svg>');
+    right:4px;
+    top:1px;
+    display: none;
+    opacity: 0.5;
+    cursor:pointer;
+}
+.table-context-menu__table:hover .table-context-menu__primary-key{
+    display: block;
+}
+.table-context-menu__primary-key:hover{
+    opacity: 1;
+}
+
 
 
 

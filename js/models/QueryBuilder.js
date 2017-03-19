@@ -6,17 +6,26 @@ var QueryBuilder = Backbone.Model.extend({
     },
     reset: function(){
         this.tables = [];
+        this.where = [];
     },
 
     addTable: function(table){
         this.tables.push(table);
     },
 
+    addWhere: function(field, operator, value){
+        this.where.push({
+            field: field,
+            operator: operator,
+            value: value
+        });
+    },
+
     buildSelect: function(){
         if(this.tables.length === 0){
             throw new Error('called buildSelect without adding table(s)');
         }else{
-            return 'SELECT *\nFROM ' + this.buildFrom() + '\nWHERE 1';
+            return 'SELECT *\nFROM ' + this.buildFrom() + '\nWHERE ' + this.buildWhere();
         }
     },
 
@@ -35,6 +44,17 @@ var QueryBuilder = Backbone.Model.extend({
             });
         }
         return from;
+    },
+
+    buildWhere: function(){
+        if(this.where.length === 0){
+            return '1';
+        }
+
+        return this.where.map(function(opts){
+            var intVal = parseInt(opts.value, 10);
+            return opts.field + opts.operator + (intVal == opts.value ? intVal : '\''+opts.value+'\'');
+        }).join(' AND ');
     },
 
     generateTableAliases: function(){

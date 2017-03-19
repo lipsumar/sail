@@ -3,9 +3,10 @@ var Backbone = require('backbone'),
     QueryBox = require('./QueryBox'),
     QueryBuilder = require('../models/QueryBuilder'),
     ResultCard = require('./ResultCard'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    TableContextMenu = require('./TableContextMenu');
 
-require('jquery.hotkeys');
+
 
 
 var Console = Backbone.View.extend({
@@ -14,10 +15,9 @@ var Console = Backbone.View.extend({
         this.tableList = new TableList();
         this.queryBox = new QueryBox();
         var queryBuilder = new QueryBuilder();
+        this.contextMenu = new TableContextMenu();
 
         this.loadTables();
-
-
 
         this.tableList.on('table-select', function(table){
             queryBuilder.reset();
@@ -46,6 +46,15 @@ var Console = Backbone.View.extend({
 
         this.queryBox.on('focus-search', this.tableList.focusSearch.bind(this.tableList));
 
+        this.contextMenu.on('field-select', function(opts){
+            queryBuilder.reset();
+            queryBuilder.addTable(opts.table);
+            queryBuilder.addWhere(opts.field, '=', opts.value);
+            var query = queryBuilder.buildSelect();
+            this.queryBox.setQuery(query);
+            this.executeQuery(query);
+        }.bind(this));
+
         $(document).bind('keydown', 'meta+p', function(e){
             e.preventDefault();
             this.tableList.focusSearch();
@@ -53,11 +62,24 @@ var Console = Backbone.View.extend({
 
     },
 
+    events: {
+        'contextmenu td': 'tdContextMenu'
+    },
+
+    tdContextMenu: function(e){
+        e.preventDefault();
+        this.contextMenu
+            .setPosition(e.clientX, e.clientY)
+            .setValue($(e.currentTarget).text())
+            .show();
+    },
+
     loadTables: function(){
         var self = this;
         $.getJSON('php/index.php?cmd=tables').then(function(resp){
             self.tables = resp.tables;
             self.tableList.setTables(self.tables);
+            self.contextMenu.setTables(self.tables);
             self.queryBox.setTables(self.tables);
         });
     },
@@ -94,6 +116,9 @@ var Console = Backbone.View.extend({
         this.$el.html(html);
         this.$('.console__tables').append(this.tableList.render().el);
         this.$('.console__query').append(this.queryBox.render().el);
+
+        $(document.body).append(this.contextMenu.render().el);
+
 
         return this;
     }

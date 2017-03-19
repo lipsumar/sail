@@ -13,7 +13,8 @@ var QueryBox = Backbone.View.extend({
     },
 
     events:{
-        'click .result-card__query': 'queryClicked'
+        'click .result-card__query': 'queryClicked',
+        'click .result-card__close': 'remove'
     },
 
     queryClicked: function(){
@@ -35,9 +36,9 @@ var QueryBox = Backbone.View.extend({
     },
 
     render: function(){
-
+        var html = '<div class="result-card__close">×</div>';
         if(this.loaded){
-            var html = '';
+
             if(!this.error){
                 html+= `<div class="result-card__count"><span>${countFormatter(this.countTotal)}</span> rows</div>`;
             }
@@ -53,12 +54,32 @@ var QueryBox = Backbone.View.extend({
                     noResultMessage: ''
                 });
                 this.$('.result-card__table').append(table.render().el);
+                /*window.jQuery('td').qtip({
+                    content: ,
+                    position:{
+                        //my: 'left center',
+                        //at: 'right center',
+                        //target: 'event',
+                        target: 'mouse',
+                        adjust:{mouse: false},
+                        //container: this.$('.result-card__table')
+                    },
+                    show: 'mousedown',
+                    events: {
+                        show: function(event){
+                            if(event.originalEvent.button !== 2) {
+                                event.preventDefault();
+                            }
+                        }
+                    }
+                }).bind('contextmenu', function(){return false;});*/
             }else{
                 this.$('.result-card__table').replaceWith('<div class="result-card__error">'+this.error+'</div>');
             }
 
         }else{
-            this.$el.html('<div class="result-card__loader-spacer"></div><div class="loader"></div><div class="result-card__loader-spacer"></div>');
+            html+='<div class="result-card__loader-spacer"></div><div class="loader"></div><div class="result-card__loader-spacer"></div>';
+            this.$el.html(html);
         }
 
 
