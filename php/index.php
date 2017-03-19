@@ -18,12 +18,12 @@ if(trim($_GET['cmd'])!=''){
             if($request_body){
                 $payload = json_decode($request_body);
 
-                $existingBoard = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
+                /*$existingBoard = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
                 if($existingBoard){
                     header('HTTP/1.1 403 Forbidden');
                     $response['error'] = 'BOARD_EXISTS';
                     $response['id'] = $boardId;
-                }else{
+                }else{*/
 
                     $id = saveBoard($boardId, $payload->config, $payload->vars);
                     if($id === false){
@@ -32,7 +32,7 @@ if(trim($_GET['cmd'])!=''){
                     }else{
                         $response['id'] = $id;
                     }
-                }
+                //}
 
 
             }else{
