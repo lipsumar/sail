@@ -29,7 +29,7 @@ var Boards = Backbone.View.extend({
                     }).join('');
                 }
                 return `<tr>
-                    <td><a href="#board/${board.id}">${board.title || board.id}</a></td>
+                    <td width="40%"><a href="#board/${board.id}">${board.title || board.id}</a></td>
                     <td>${vars}</td>
                 </tr>`;
             }).join('');

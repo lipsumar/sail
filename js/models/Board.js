@@ -15,6 +15,7 @@ cards:
 var Board = Backbone.Model.extend({
     defaults:{
         config: defaultConfig,
+        title: 'New board',
         vars: ['foo'],
         id: null
     },

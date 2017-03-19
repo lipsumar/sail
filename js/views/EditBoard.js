@@ -47,8 +47,11 @@ var EditBoard = Backbone.View.extend({
     },
 
     render: function(){
-        var html = '<div class="textarea">'+this.board.get('config')+'</div>';
-        html+='<button class="save">💾</button>';
+        var html = `<div class="body__inner">
+            <h1 class="body-title">${this.board.get('title')}</h1>
+            <div class="textarea">${this.board.get('config')}</div>
+            <button class="save">Save</button>
+        </div>`;
         this.$el.html(html);
 
         this.editor = window.ace.edit(this.$('.textarea')[0]);

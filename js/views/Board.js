@@ -3,9 +3,10 @@ var Backbone = require('backbone'),
     YAML = require('yamljs'),
     Card = require('./Card.js'),
     CardTimeline = require('./CardTimeline.js'),
+    CardCount = require('./CardCount.js'),
     BoardModel = require('../models/Board');
 
-var CardTypes = {Card, CardTimeline};
+var CardTypes = {Card, CardTimeline, CardCount};
 
 var Board = Backbone.View.extend({
     initialize: function(boardId, opts){
@@ -19,6 +20,7 @@ var Board = Backbone.View.extend({
     },
 
     formSubmit: function(e){
+        console.log('go');
         e.preventDefault();
 
         this.vars = this.$('form').serializeArray().reduce(function(vars, v){
@@ -53,7 +55,7 @@ var Board = Backbone.View.extend({
         var vars = this.vars;
         var inputs = $.map(this.config.vars, function(label, variable){
             var name = label || variable;
-            return '<div class="var">'+name+':<input name="'+name+'" value="'+(vars[variable] || '')+'" autocomplete="off"></div>';
+            return '<div class="var">'+name+':<input name="'+variable+'" value="'+(vars[variable] || '')+'" autocomplete="off"></div>';
         });
         this.$('.vars').html(inputs.join('')+'<button type="submit" class="reload">▶</button>');
 

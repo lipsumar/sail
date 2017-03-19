@@ -22,6 +22,14 @@ h1,h2,h3,h4,h5,h6,p{
 button,input{
     outline:none;
 }
+button{
+    border:1px solid #B0BEC5;
+    background-color: #B0BEC5;
+    color:#fff;
+    padding:5px 10px;
+    font-size:0.8em;
+    cursor: pointer;
+}
 
 a{
     color:#1565C0;
@@ -187,6 +195,10 @@ a{
     overflow: scroll;
     padding-bottom:1em;
 }
+.body__inner{
+    padding-left: 2em;
+    padding-right: 2em;
+}
 
 
 .cards{
@@ -225,6 +237,10 @@ a{
 .card__query--open{
     height:auto;
     margin-bottom:1em;
+}
+
+.card-count__count{
+    font-size:3em;
 }
 
 

@@ -22,6 +22,7 @@ var App = Backbone.View.extend({
 
     index: function(){
         this.showBody('index');
+        this.activeMenu(null);
     },
 
     console: function(){
