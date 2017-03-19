@@ -3,7 +3,8 @@ var Backbone = require('backbone'),
     ConsoleView = require('./Console'),
     BoardView = require('./Board'),
     BoardModel = require('../models/Board'),
-    EditBoardView = require('./EditBoard');
+    EditBoardView = require('./EditBoard'),
+    BoardsView = require('./Boards');
 
 var App = Backbone.View.extend({
 
@@ -13,6 +14,7 @@ var App = Backbone.View.extend({
         router.on('route:console', this.console.bind(this));
         router.on('route:board', this.board.bind(this));
         router.on('route:editBoard', this.editBoard.bind(this));
+        router.on('route:boards', this.boards.bind(this));
         this.router = router;
 
 
@@ -27,6 +29,16 @@ var App = Backbone.View.extend({
         this.activeMenu('console');
         this.consoleView = new ConsoleView();
         this.$bodyConsole.append(this.consoleView.render().el);
+    },
+
+    boards: function(){
+        if(this.boardsView){
+            this.boardsView.remove();
+        }
+        this.boardsView = new BoardsView();
+        this.showBody('generic');
+        this.$bodyGeneric.empty();
+        this.$bodyGeneric.append(this.boardsView.render().el);
     },
 
     board: function(id, queryString){
@@ -56,6 +68,7 @@ var App = Backbone.View.extend({
         }
         var self = this;
         this.showBody('generic');
+        this.$bodyGeneric.empty();
 
         var board = new BoardModel(id === 'new' ? null : {id:id});
         this.activeMenu(board.isNew() ? 'new' : 'board');

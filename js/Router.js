@@ -6,6 +6,7 @@ var Router = Backbone.Router.extend({
         '': 'index',
         'console': 'console',
         'board/:id(?querystring)': 'board',
+        'boards': 'boards',
         'edit/board/:id': 'editBoard'
     }
 });

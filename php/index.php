@@ -17,13 +17,24 @@ if(trim($_GET['cmd'])!=''){
 
             if($request_body){
                 $payload = json_decode($request_body);
-                $id = saveBoard($boardId, $payload->config);
-                if($id === false){
-                    header('HTTP/1.1 500 Internal Server Error');
-                    $response['error'] = 'SAVE_FAILED';
+
+                $existingBoard = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
+                if($existingBoard){
+                    header('HTTP/1.1 403 Forbidden');
+                    $response['error'] = 'BOARD_EXISTS';
+                    $response['id'] = $boardId;
                 }else{
-                    $response['id'] = $id;
+
+                    $id = saveBoard($boardId, $payload->config, $payload->vars);
+                    if($id === false){
+                        header('HTTP/1.1 500 Internal Server Error');
+                        $response['error'] = 'SAVE_FAILED';
+                    }else{
+                        $response['id'] = $id;
+                    }
                 }
+
+
             }else{
                 $board = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
 
@@ -35,8 +46,11 @@ if(trim($_GET['cmd'])!=''){
                 }
             }
 
+            break;
 
-
+        case 'boards':
+            $boards = getRecords($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', '1', '', 'order by crdate desc');
+            $response['boards'] = $boards;
             break;
 
         case 'query':

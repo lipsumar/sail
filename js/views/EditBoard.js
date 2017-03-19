@@ -1,4 +1,5 @@
-var Backbone = require('backbone');
+var Backbone = require('backbone'),
+    YAML = require('yamljs');
 
 var EditBoard = Backbone.View.extend({
     className: 'edit-board',
@@ -12,11 +13,37 @@ var EditBoard = Backbone.View.extend({
 
     save: function(){
         var self = this;
-        this.board.set('config', this.editor.getValue());
+        var yaml = this.editor.getValue();
+
+        var config = this.parseYaml(yaml);
+        if(!config){
+            alert('YAML error');
+            return;
+        }
+
+        this.board.set('config', yaml);
+        this.board.set('vars', Object.keys(config.vars));
+        this.board.set('id', config.id);
         this.board.save().then(function(){
             window.app.navigate('board/'+self.board.id);
-        });
+        }, this.handleSaveError.bind(this));
 
+    },
+
+    handleSaveError: function(resp){
+        if(resp && resp.error === 'BOARD_EXISTS'){
+            alert('Board ID "'+resp.id+'" already in use');
+        }
+    },
+
+    parseYaml: function(yaml){
+        var json;
+        try{
+            json = YAML.parse(yaml);
+        }catch(err){
+            return false;
+        }
+        return json;
     },
 
     render: function(){

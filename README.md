@@ -50,8 +50,10 @@ You will also need the following database (self DB) to store boards:
 
 ```
 CREATE TABLE IF NOT EXISTS `board` (
-  `id` varchar(8) NOT NULL,
+  `id` varchar(32) NOT NULL,
+  `crdate` INT NOT NULL,
   `config` text NOT NULL,
+  `vars` TEXT NOT NULL,
 
   PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;

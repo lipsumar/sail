@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 
 var defaultConfig = `title: New board
+id:
 vars:
   foo:
 cards:
@@ -13,7 +14,9 @@ cards:
 
 var Board = Backbone.Model.extend({
     defaults:{
-        config: defaultConfig
+        config: defaultConfig,
+        vars: ['foo'],
+        id: null
     },
     url: function(){
         return 'php/?cmd=board&board='+(this.id || 'new');

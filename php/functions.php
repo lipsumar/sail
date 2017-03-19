@@ -150,17 +150,17 @@ function getRecords($db, $table, $where = '1=1', $group = '', $order = '', $limi
 }
 
 
-function saveBoard($id, $config){
+function saveBoard($id, $config, $vars){
     global $dbSelf;
     $table = $GLOBALS['SAIL_SETTINGS']->db_self->prefix . 'board';
     $existing = getRecord($dbSelf, $table, $id);
     if($existing && $id!=='new'){
-        $q = 'update '.$table.' set config=\''.addslashes($config).'\' where id=\''.addslashes($id).'\'';
+        $q = 'update '.$table.' set config=\''.addslashes($config).'\', vars=\''.implode(',',$vars).'\' where id=\''.addslashes($id).'\'';
     }else{
         if($id === 'new'){
             $id = generateId($table);
         }
-        $q = 'insert into '.$table.' set id=\''.$id.'\', config=\''.addslashes($config).'\'';
+        $q = 'insert into '.$table.' set id=\''.$id.'\', crdate='.time().', config=\''.addslashes($config).'\', vars=\''.implode(',',$vars).'\'';
     }
 
     if(mysql_query($q, $dbSelf)){
