@@ -30,7 +30,17 @@ var Table = Backbone.View.extend({
                     /*if(valueString.length > 30){
                         valueString = valueString.substring(0, 30)+'...';
                     }*/
-                    html+='<td>'+valueString+'</td>';
+                    if(field === '_sail_url'){
+                        var parts = valueString.split('-&gt;'), //@TODO server should not escape HTML
+                            url = valueString;
+                        if(parts.length>1){
+                            url = parts[1];
+                        }
+                        html+='<td><a href="'+url+'">'+parts[0]+'</a></td>';
+                    }else{
+                        html+='<td>'+valueString+'</td>';
+                    }
+
                 });
                 html+='</tr>';
                 even = !even;

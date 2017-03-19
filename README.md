@@ -34,6 +34,14 @@ Boards also support variables. These variables can be used in queries and users 
 
 Additionnaly, cards can render the results of queries in a more graphical manner.
 
+## Special features
+
+### Clickable SQL results
+SQL values can be made clickable by naming a column `_sail_url`. 
+The values of that column will be rendered as a link.
+
+To name links, use the following syntax: `link_name->http://link.com`
+
 
 ## Requirements
 * PHP
