@@ -1,15 +1,16 @@
 {
     "db_self":{
         "host":"localhost",
-        "name":"dbnavigator",
+        "name":"sail",
         "user":"root",
         "pass":"root",
         "prefix": ""
     },
     "db_target":{
         "host":"localhost",
-        "name":"test",
+        "name":"employees",
         "user":"root",
         "pass":"root"
-    }
+    },
+    "path": "/Sail/"
 }

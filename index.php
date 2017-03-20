@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<?php
+$SAIL_SETTINGS = json_decode(file_get_contents('./settings.json'));
+?><!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Sail</title>
-    <base href="/Sail/">
+    <base href="<?php echo $SAIL_SETTINGS->path; ?>">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 
