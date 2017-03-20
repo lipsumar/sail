@@ -40,7 +40,11 @@ Additionnaly, cards can render the results of queries in a more graphical manner
 SQL values can be made clickable by naming a column `_sail_url`. 
 The values of that column will be rendered as a link.
 
-To name links, use the following syntax: `link_name->http://link.com`
+To name links, use the following syntax: `link_name->http://link.com`.
+
+You can easily link to other boards by crafting a link like `#board/<board-id>`, and even name it: `click_me->#board/<board-id>`.
+
+This feature works in console and boards.
 
 ### Query builder [⚡Experimental]
 To create joins easily, first click a table then `cmd + click` another table: a JOIN query will be made (but not executed automatically).
