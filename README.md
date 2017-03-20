@@ -2,13 +2,13 @@
 
 > Navigate databases and share results
 
-**Work in progress, not yet fully functionnal**
+**🚧 Alpha version**
 
 ## What is it ?
 
 **Sail** allows to navigate fast and easily around a database.
 
-Its sole purpose is to hepl `SELECT` data, this tool is _not_ made to create or modify data.
+Its sole purpose is to help `SELECT` data, this tool is _not_ made to create or modify data.
 
 There are 2 main areas: the console and the boards.
 
@@ -41,6 +41,11 @@ SQL values can be made clickable by naming a column `_sail_url`.
 The values of that column will be rendered as a link.
 
 To name links, use the following syntax: `link_name->http://link.com`
+
+### Query builder [⚡Experimental]
+To create joins easily, first click a table then `cmd + click` another table: a JOIN query will be made (but not executed automatically).
+
+🚧 This feature is under development, it currently doesn't do table aliases or ON clause yet.
 
 
 ## Requirements
