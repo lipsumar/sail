@@ -30,7 +30,7 @@ if(trim($_GET['cmd'])!=''){
                         header('HTTP/1.1 500 Internal Server Error');
                         $response['error'] = 'SAVE_FAILED';
                     }else{
-                        $response['id'] = $id;
+                        $response = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $id);
                     }
                 //}
 

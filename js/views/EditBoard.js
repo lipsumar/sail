@@ -22,8 +22,10 @@ var EditBoard = Backbone.View.extend({
         }
 
         this.board.set('config', yaml);
-        this.board.set('vars', Object.keys(config.vars));
-        this.board.set('id', config.id);
+        this.board.set('vars', config.vars ? Object.keys(config.vars) : []);
+        if(config.id){
+            this.board.set('id', config.id);
+        }
         this.board.save().then(function(){
             window.app.navigate('board/'+self.board.id);
         }, this.handleSaveError.bind(this));
@@ -33,6 +35,8 @@ var EditBoard = Backbone.View.extend({
     handleSaveError: function(resp){
         if(resp && resp.error === 'BOARD_EXISTS'){
             alert('Board ID "'+resp.id+'" already in use');
+        }else{
+            alert('Server error');
         }
     },
 

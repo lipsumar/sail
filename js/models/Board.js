@@ -17,8 +17,7 @@ var Board = Backbone.Model.extend({
     defaults:{
         config: defaultConfig,
         title: 'New board',
-        vars: ['foo'],
-        id: null
+        vars: ['foo']
     },
     parse: function(board){
         var config = YAML.parse(board.config);
