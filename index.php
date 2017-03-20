@@ -17,6 +17,12 @@ $SAIL_SETTINGS = json_decode(file_get_contents('./settings.json'));
     <link rel="shortcut icon" href="favicon/favicon.ico">
     <meta name="msapplication-config" content="favicon/browserconfig.xml">
     <meta name="theme-color" content="#607d8b">
+
+    <script>
+        window.SailOptions = {
+            dbSelf: <?php echo $SAIL_SETTINGS->db_self ? 'true' : 'false'; ?>
+        };
+    </script>
 </head>
 <body>
 	<div id="app"></div>

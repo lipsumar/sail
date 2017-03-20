@@ -126,9 +126,9 @@ var App = Backbone.View.extend({
             <div class="body body-index">
                 <h1 class="body-title">Welcome to Sail</h1>
                 <div class="body-menu">
-                    <div class="body-menu__item">Craft queries in the console</div>
-                    <div class="body-menu__item">View existing boards</div>
-                    <div class="body-menu__item">Create a new board</div>
+                    <div class="body-menu__item body-menu__item--console">Craft queries in the console</div>
+                    <div class="body-menu__item body-menu__item--board">View existing boards</div>
+                    <div class="body-menu__item body-menu__item--new">Create a new board</div>
                 </div>
             </div>
             <div class="body body-console" style="display:none"></div>
@@ -139,6 +139,12 @@ var App = Backbone.View.extend({
         this.$bodyConsole = this.$('.body-console');
         this.$bodyBoard = this.$('.body-board');
         this.$bodyGeneric = this.$('.body-generic');
+
+        if(!window.SailOptions.dbSelf){
+            this.$('[data-menu="board"], [data-menu="new"]').hide();
+            this.$('.body-menu__item--board, .body-menu__item--new').hide();
+        }
+
         return this;
     }
 

@@ -46,7 +46,7 @@ To name links, use the following syntax: `link_name->http://link.com`
 ## Requirements
 * PHP
 * MySQL
-* Google Chrome (haven't tested anywhere else yet)
+* Google Chrome (Firefox seems fine)
 
 ## Install
 
@@ -68,6 +68,8 @@ CREATE TABLE IF NOT EXISTS `board` (
 ```
 
 Set "self" and "target" database credentials in `settings.json`.
+
+You may set `db_self` to `null` to disable boards; only the console will be usable.
 
 
 ## Keyoard shortcuts

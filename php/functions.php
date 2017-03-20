@@ -2,12 +2,15 @@
 require_once('./dqml2tree.php');
 
 // connect to self db
-$dbSelf = @mysql_connect(
-    $GLOBALS['SAIL_SETTINGS']->db_self->host,
-    $GLOBALS['SAIL_SETTINGS']->db_self->user,
-    $GLOBALS['SAIL_SETTINGS']->db_self->pass
-) or die('Unable to connect to self DB.<br/>MySQL said: '.mysql_error());
-mysql_select_db($GLOBALS['SAIL_SETTINGS']->db_self->name, $dbSelf) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+if($GLOBALS['SAIL_SETTINGS']->db_self){
+    $dbSelf = @mysql_connect(
+        $GLOBALS['SAIL_SETTINGS']->db_self->host,
+        $GLOBALS['SAIL_SETTINGS']->db_self->user,
+        $GLOBALS['SAIL_SETTINGS']->db_self->pass
+    ) or die('Unable to connect to self DB.<br/>MySQL said: '.mysql_error());
+    mysql_select_db($GLOBALS['SAIL_SETTINGS']->db_self->name, $dbSelf) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+}
+
 
 // connect to target db
 $dbTarget = @mysql_connect(
