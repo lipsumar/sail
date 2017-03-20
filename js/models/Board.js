@@ -1,4 +1,5 @@
-var Backbone = require('backbone');
+var Backbone = require('backbone'),
+    YAML = require('yamljs');
 
 var defaultConfig = `title: New board
 id:
@@ -18,6 +19,12 @@ var Board = Backbone.Model.extend({
         title: 'New board',
         vars: ['foo'],
         id: null
+    },
+    parse: function(board){
+        var config = YAML.parse(board.config);
+        board.title = config.title;
+        board.vars = config.vars;
+        return board;
     },
     url: function(){
         return 'php/?cmd=board&board='+(this.id || 'new');

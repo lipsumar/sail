@@ -96,7 +96,7 @@ var Card = Backbone.View.extend({
         var html = '<div class="card__tools"><button class="edit-query">📝</button></div>';
         html+='<h2>'+this.title+'</h2>';
         html+='<div class="card__query"><div class="textarea">'+this.query+'</div></div>';
-        html+='<div class="card__body">⏳</div>';
+        html+='<div class="card__body"><div class="loader"></div></div>';
         return html;
     },
 

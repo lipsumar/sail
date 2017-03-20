@@ -85,4 +85,5 @@ Set "self" and "target" database credentials in `settings.json`.
   * console by Vignesh Nandha Kumar from the Noun Project
   * board by Jake Dunham from the Noun Project
   * Key by il Capitano from the Noun Project
+  * edit by Icons fest from the Noun Project
 
