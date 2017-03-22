@@ -159,6 +159,7 @@ var TableContextMenu = Backbone.View.extend({
         this.$('.table-context-menu__fields').hide();
         this.$('.table-context-menu__selected-table').hide();
         this.$('.table-context-menu__table').show();
+        this.showingFields = false;
     },
 
     render: function(){
