@@ -20,11 +20,17 @@ var CardTimeline = Card.extend({
             });
 
             var x = d3.scale.linear()
-                .domain([0, d3.max(data, function(d) { return d[0]; })])
+                .domain([
+                    d3.min(data, function(d) { return d[0]; }),
+                    d3.max(data, function(d) { return d[0]; })
+                ])
                 .range([ 0, width ]);
 
             var y = d3.scale.linear()
-                .domain([0, d3.max(data, function(d) { return d[1]; })])
+                .domain([
+                    d3.min(data, function(d) { return d[1]; }),
+                    d3.max(data, function(d) { return d[1]; })
+                ])
                 .range([ height, 0 ]);
 
             this.$('.card__body').empty();
