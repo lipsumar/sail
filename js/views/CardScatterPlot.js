@@ -14,8 +14,8 @@ var CardTimeline = Card.extend({
 
             var data = this.rows.map(function(row){
                 return [
-                    parseInt(row.x, 10),
-                    parseInt(row.y, 10)
+                    parseFloat(row.x),
+                    parseFloat(row.y)
                 ];
             });
 
@@ -68,7 +68,7 @@ var CardTimeline = Card.extend({
               .enter().append("svg:circle")
                   .attr("cx", function (d) { return x(d[0]); } )
                   .attr("cy", function (d) { return y(d[1]); } )
-                  .attr("r", 8);
+                  .attr("r", 5);
         }
         return this;
     }
