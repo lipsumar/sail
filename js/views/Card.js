@@ -13,11 +13,6 @@ var Card = Backbone.View.extend({
         this.tryFetch();
 
         this.board.on('varsChanged', this.tryFetch.bind(this));
-
-        if(opts.width){
-            this.$el.css('width', opts.width);
-        }
-
     },
 
     events:{

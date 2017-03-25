@@ -81,7 +81,12 @@ var Board = Backbone.View.extend({
         }else{
             var cardClass = cardConfig.renderer || 'Card';
             var card = new CardTypes[cardClass](Object.assign({}, cardConfig, {board:this}));
-            $parent.append(card.render().el);
+            var $cell = $('<div class="grid__cell"></div>');
+            if(cardConfig.width){
+                $cell.css('flex', '0 0 '+cardConfig.width);
+            }
+            $cell.append(card.render().el);
+            $parent.append($cell);
         }
     },
 

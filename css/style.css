@@ -213,11 +213,13 @@ a{
 }
 .card{
     position: relative;
-    margin-bottom:2em;
+    width:100%;
+    margin-bottom:1em;
     border-radius: 2px;
     padding:0.7em 1em 0.8em 1em;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     background-color: #fff;
+    overflow:auto; /* fix flexbox overflow */
 }
 .card__body{
     overflow: auto;
@@ -322,8 +324,9 @@ table td{
     display:flex;
     margin-left:-1em;
 }
-.grid__row > .card{
-    margin-left:1em;
+.grid__row > .grid__cell{
+    padding-left:1em;
+    display: flex;
 }
 
 
