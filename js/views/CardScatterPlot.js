@@ -9,8 +9,8 @@ var CardTimeline = Card.extend({
 
         if(this.loaded){
             var margin = {top: 20, right: 60, bottom: 60, left: 40},
-                width = 960 - margin.left - margin.right,
-                height = 500- margin.top - margin.bottom;
+                width = this.$('.card__body').width() - margin.left - margin.right,
+                height = Math.max(this.$('.card__body').height(), 400) - margin.top - margin.bottom;
 
             var data = this.rows.map(function(row){
                 return [
