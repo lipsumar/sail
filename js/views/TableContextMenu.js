@@ -1,46 +1,37 @@
-var Backbone = require('backbone'),
+var FilteredListBase = require('./FilteredListBase'),
     $ = require('jquery');
 
 var WIDTH = 220;
 
-var TableContextMenu = Backbone.View.extend({
+var TableContextMenu = FilteredListBase.extend({
     className: 'table-context-menu',
 
     initialize: function(){
+        FilteredListBase.prototype.initialize.call(this);
         $(document.body).on('click', this.hide.bind(this));
         $(document).bind('keydown', 'esc', this.hide.bind(this));
     },
 
-    events: {
+    events: Object.assign({
         'click': 'stopEvent',
-        'keyup input': 'updateSearch',
-        'click .table-context-menu__table': 'tableClicked',
         'click .table-context-menu__primary-key': 'primaryKeyClicked',
-        'click .table-context-menu__field': 'fieldClicked'
-    },
+    }, FilteredListBase.prototype.events),
 
-    tableClicked: function(e){
-        var table = $(e.currentTarget).attr('title');
-        this.selectTable(table);
-    },
 
-    selectTable: function(table){
-        this.selectedTable = table;
-        this.showFields(table);
-    },
 
-    fieldClicked: function(e){
-        var field = $(e.currentTarget).attr('title');
-        this.selectField(field);
-    },
+    selectItem: function(item){
+        if(this.showingFields){
+            this.trigger('field-select', {
+                table: this.selectedTable,
+                field: item,
+                value: this.value
+            });
+            this.hide();
+        }else{
+            this.selectedTable = item;
+            this.showFields(item);
+        }
 
-    selectField: function(field){
-        this.trigger('field-select', {
-            table: this.selectedTable,
-            field: field,
-            value: this.value
-        });
-        this.hide();
     },
 
     primaryKeyClicked: function(e){
@@ -62,59 +53,33 @@ var TableContextMenu = Backbone.View.extend({
 
     setTables: function(tables){
         this.tables = tables;
+        this.listLength = Object.keys(tables).length;
         var html = Object.keys(this.tables).map(function(tableName){
-            return '<div class="table-context-menu__table" title="'+tableName+'">'+ tableName
+            return '<div class="table-context-menu__table list-item" title="'+tableName+'">'+ tableName
             + '<span class="table-context-menu__primary-key" title="'+tables[tableName].__PRI+'"></span></div>';
         }).join('');
         this.$('.table-context-menu__tables .table-context-menu__scroll').html(html);
+        this.updateSearch();
         return this;
     },
 
     showFields: function(table){
         this.showingFields = true;
         this.$input.val('').focus();
+        this.resetKeyboardIndex();
         this.$('.table-context-menu__tables').hide();
         this.$('.table-context-menu__fields').show();
         this.$('.table-context-menu__selected-table').text(table+'.').show();
         var fields = this.tables[table].__fields;
-        var html = fields.map(function(f){
-            return '<div class="table-context-menu__field" title="'+f+'">'+f+'</div>';
+        var html = fields.map(function(f, i){
+            return '<div class="table-context-menu__field list-item" title="'+f+'" data-index="'+i+'">'+f+'</div>';
         }).join('');
         this.$('.table-context-menu__fields .table-context-menu__scroll').html(html);
     },
 
-    updateSearch: function(){
-        var q = this.$input.val();
-        var itemClass = '.table-context-menu__table';
-        if(this.showingFields){
-            itemClass = '.table-context-menu__field';
-        }
-        this.searchIsOne = false;
-        var showed = 0; var t;
-        this.$(itemClass).each(function(){
-            var $el = $(this);
-            var text = $el.text();
-            if(text.includes(q)){
-                $el.show();
-                showed++;
-                t = text;
-            }else{
-                $el.hide();
-            }
-        });
-        if(showed===1){
-            this.searchIsOne = t;
-        }
-    },
-
-    selectIfOne: function(){
-        if(this.searchIsOne){
-            if(!this.showingFields){
-                this.selectTable(this.searchIsOne);
-            }else{
-                this.selectField(this.searchIsOne);
-            }
-        }
+    getKeyboardFocusedTable: function(){
+        var className = this.showingFields ? 'table-context-menu__field' : 'table-context-menu__table';
+        return this.$('.'+className+'[data-index="'+this.keyboardFocusIndex+'"]').attr('title');
     },
 
     setPosition: function(x, y){
@@ -150,7 +115,7 @@ var TableContextMenu = Backbone.View.extend({
 
     show: function(){
         this.$el.show();
-        this.$input.focus();
+        this.focusSearch();
     },
     hide: function(){
         this.$el.hide();
@@ -177,9 +142,8 @@ var TableContextMenu = Backbone.View.extend({
             </div>
             `;
             this.$el.html(html);
-            this.$input = this.$('input');
+            FilteredListBase.prototype.afterRender.call(this);
             this.$input.bind('keydown', 'esc', this.hide.bind(this)); //explicitely bind esc to search field, otherwise it's ignored
-            this.$input.bind('keydown', 'return', this.selectIfOne.bind(this));
             this.rendered = true;
         }
 

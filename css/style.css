@@ -404,7 +404,8 @@ table td{
     cursor:pointer;
     padding:0 10px;
 }
-.table-list__table:hover{
+.table-list__table:hover,
+.table-list__table.focus{
     background-color: #455A64;
 }
 
@@ -576,7 +577,9 @@ table td{
     padding-left:25px;
 }
 .table-context-menu__table:hover,
-.table-context-menu__field:hover
+.table-context-menu__table.focus,
+.table-context-menu__field:hover,
+.table-context-menu__field.focus
 {
     background-color: #455A64;
 }
