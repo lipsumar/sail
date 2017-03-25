@@ -65,6 +65,7 @@ var EditBoard = Backbone.View.extend({
         });
         this.editor.renderer.setShowGutter(false);
         this.editor.getSession().setMode("ace/mode/yaml");
+        this.editor.getSession().setTabSize(2);
 
         return this;
     }
