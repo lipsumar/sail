@@ -20,7 +20,8 @@ $SAIL_SETTINGS = json_decode(file_get_contents('./settings.json'));
 
     <script>
         window.SailOptions = {
-            dbSelf: <?php echo $SAIL_SETTINGS->db_self ? 'true' : 'false'; ?>
+            dbSelf: <?php echo $SAIL_SETTINGS->db_self ? 'true' : 'false'; ?>,
+            styledRows: <?php echo json_encode($SAIL_SETTINGS->styled_rows); ?>
         };
     </script>
 </head>

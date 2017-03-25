@@ -23,8 +23,26 @@ var Table = Backbone.View.extend({
             var fields = this.fields;
 
             var even = true;
+            if(window.SailOptions.styledRows && window.SailOptions.styledRows instanceof Array){
+                var styledRows = window.SailOptions.styledRows.filter(function(styledRow){
+                    return fields.indexOf(styledRow.column);
+                });
+            }
+
             this.rows.forEach(function(row){
-                html+='<tr class="'+(even ? 'even' : 'odd')+'">';
+                html+='<tr class="'+(even ? 'even' : 'odd')+'"';
+                var styles = [];
+                styledRows.forEach(function(styledRow){
+                    if(row[styledRow.column] == styledRow.value){
+                        styles.push(styledRow.style);
+                    }
+                });
+
+                if(styles.length > 0){
+                    html+= 'style="' + styles.join(';') + '"';
+                }
+                html+='>';
+
                 fields.forEach(function(field){
                     var valueString = row[field] ? row[field].toString() : '';
                     /*if(valueString.length > 30){

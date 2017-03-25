@@ -12,5 +12,17 @@
         "user":"root",
         "pass":"root"
     },
-    "path": "/Sail/"
+    "path": "/Sail/",
+    "styled_rows":[
+        {
+            "column": "hidden",
+            "value": 1,
+            "style": "color: #999"
+        },
+        {
+            "column": "deleted",
+            "value": 1,
+            "style": "text-decoration: line-through"
+        }
+    ]
 }

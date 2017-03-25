@@ -108,6 +108,44 @@ Set "self" and "target" database credentials in `settings.json`.
 
 You may set `db_self` to `null` to disable boards; only the console will be usable.
 
+### Example settings.json
+```json
+{
+    "db_self":{
+        "host":"localhost",
+        "name":"sail",
+        "user":"root",
+        "pass":"root",
+        "prefix": ""
+    },
+    "db_target":{
+        "host":"localhost",
+        "name":"test",
+        "user":"root",
+        "pass":"root"
+    },
+    "path": "/Sail/",
+    "styled_rows":[
+        {
+            "column": "hidden",
+            "value": 1,
+            "style": "color: #999"
+        },
+        {
+            "column": "deleted",
+            "value": 1,
+            "style": "text-decoration: line-through"
+        }
+    ]
+}
+```
+
+* `db_self` is the database used by Sail to store boards (optional)
+* `db_target` is the database the queries should be perfomed on.
+* `path` is the directory where you installed Sail.
+* `styled_rows` allows to style table rows if it contains a `column` matching `value` (applies to boards and console)
+
+
 
 ## Keyoard shortcuts
 
