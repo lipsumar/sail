@@ -49,7 +49,7 @@ var Board = Backbone.View.extend({
         }
         this.$('.body-title span').text(this.config.title);
         this.renderVars();
-        this.cards = config.cards.map(this.buildCard.bind(this));
+        config.cards.forEach(this.buildCard.bind(this));
     },
 
     renderVars: function(){
@@ -63,11 +63,26 @@ var Board = Backbone.View.extend({
         this.$('.vars input').autoresize({padding:5,minWidth:60,maxWidth:300});
     },
 
-    buildCard: function(cardConfig){
-        var cardClass = cardConfig.renderer || 'Card';
-        var card = new CardTypes[cardClass](Object.assign({}, cardConfig, {board:this}));
-        this.$cards.append(card.render().el);
-        return card;
+    buildCard: function(cardConfig, $parent){
+        if(cardConfig instanceof $){ // switch params
+            var temp = $parent;
+            $parent = cardConfig;
+            cardConfig = temp;
+        }
+
+        if(!($parent instanceof $)){
+            $parent = this.$cards;
+        }
+
+        if(cardConfig.row){
+            var $row = $('<div class="grid__row"></div>');
+            $parent.append($row);
+            cardConfig.row.forEach(this.buildCard.bind(this, $row));
+        }else{
+            var cardClass = cardConfig.renderer || 'Card';
+            var card = new CardTypes[cardClass](Object.assign({}, cardConfig, {board:this}));
+            $parent.append(card.render().el);
+        }
     },
 
     render: function(){

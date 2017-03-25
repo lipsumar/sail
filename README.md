@@ -34,6 +34,34 @@ Boards also support variables. These variables can be used in queries and users 
 
 Additionnaly, cards can render the results of queries in a more graphical manner.
 
+#### Board config example
+```yaml
+title: Latest campaigns overview
+id: latest-campaigns
+vars:
+  top_num: Number of campaigns
+cards:
+  - title: Top latest campaigns
+    query: |
+      SELECT *
+      FROM t_campaigns
+      WHERE deleted=0 AND live=1
+      ORDER BY date DESC
+      LIMIT $top_num
+  
+  - row: 
+    - title: Total campaigns
+      renderer: CardCount
+      width: 50%
+      query: SELECT count(*) AS num FROM t_campaigns WHERE deleted=0 
+
+    - title: Total live campaigns
+      width: 50%
+      renderer: CardCount
+      query: SELECT count(*) AS num FROM t_campaigns WHERE deleted=0 AND live=1
+```
+
+
 ## Special features
 
 ### Clickable SQL results
