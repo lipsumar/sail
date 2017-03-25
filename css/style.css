@@ -219,6 +219,9 @@ a{
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     background-color: #fff;
 }
+.card__body{
+    overflow: auto;
+}
 
 .card--error .card__body{
     color:#E53935;
