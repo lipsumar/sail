@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 
-$SAIL_SETTINGS = json_decode(file_get_contents('../settings.json'));
+require_once('../settings.php');
 
 require_once('functions.php');
 $dbSelf = $GLOBALS['dbSelf'];
@@ -18,7 +18,7 @@ if(trim($_GET['cmd'])!=''){
             if($request_body){
                 $payload = json_decode($request_body);
 
-                /*$existingBoard = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
+                /*$existingBoard = getRecord($dbSelf, $SAIL_SETTINGS['db_self']->prefix . 'board', $boardId);
                 if($existingBoard){
                     header('HTTP/1.1 403 Forbidden');
                     $response['error'] = 'BOARD_EXISTS';
@@ -30,13 +30,13 @@ if(trim($_GET['cmd'])!=''){
                         header('HTTP/1.1 500 Internal Server Error');
                         $response['error'] = 'SAVE_FAILED';
                     }else{
-                        $response = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $id);
+                        $response = getRecord($dbSelf, $SAIL_SETTINGS['db_self']->prefix . 'board', $id);
                     }
                 //}
 
 
             }else{
-                $board = getRecord($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', $boardId);
+                $board = getRecord($dbSelf, $SAIL_SETTINGS['db_self']->prefix . 'board', $boardId);
 
                 if($board){
                     $response = $board;
@@ -49,7 +49,7 @@ if(trim($_GET['cmd'])!=''){
             break;
 
         case 'boards':
-            $boards = getRecords($dbSelf, $SAIL_SETTINGS->db_self->prefix . 'board', '1', '', 'order by crdate desc');
+            $boards = getRecords($dbSelf, $SAIL_SETTINGS['db_self']->prefix . 'board', '1', '', 'order by crdate desc');
             $response['boards'] = $boards;
             break;
 

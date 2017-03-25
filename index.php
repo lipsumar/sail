@@ -1,11 +1,11 @@
 <?php
-$SAIL_SETTINGS = json_decode(file_get_contents('./settings.json'));
+require_once('./settings.php');
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Sail</title>
-    <base href="<?php echo $SAIL_SETTINGS->path; ?>">
+    <base href="<?php echo $SAIL_SETTINGS['path']; ?>">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 
@@ -20,8 +20,8 @@ $SAIL_SETTINGS = json_decode(file_get_contents('./settings.json'));
 
     <script>
         window.SailOptions = {
-            dbSelf: <?php echo $SAIL_SETTINGS->db_self ? 'true' : 'false'; ?>,
-            styledRows: <?php echo json_encode($SAIL_SETTINGS->styled_rows); ?>
+            dbSelf: <?php echo $SAIL_SETTINGS['db_self'] ? 'true' : 'false'; ?>,
+            styledRows: <?php echo json_encode($SAIL_SETTINGS['styled_rows']); ?>
         };
     </script>
 </head>

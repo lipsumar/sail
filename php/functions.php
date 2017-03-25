@@ -2,24 +2,24 @@
 require_once('./dqml2tree.php');
 
 // connect to self db
-if($GLOBALS['SAIL_SETTINGS']->db_self){
+if($GLOBALS['SAIL_SETTINGS']['db_self']){
     $dbSelf = @mysql_connect(
-        $GLOBALS['SAIL_SETTINGS']->db_self->host,
-        $GLOBALS['SAIL_SETTINGS']->db_self->user,
-        $GLOBALS['SAIL_SETTINGS']->db_self->pass
+        $GLOBALS['SAIL_SETTINGS']['db_self']['host'],
+        $GLOBALS['SAIL_SETTINGS']['db_self']['user'],
+        $GLOBALS['SAIL_SETTINGS']['db_self']['pass']
     ) or die('Unable to connect to self DB.<br/>MySQL said: '.mysql_error());
-    mysql_select_db($GLOBALS['SAIL_SETTINGS']->db_self->name, $dbSelf) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+    mysql_select_db($GLOBALS['SAIL_SETTINGS']['db_self']['name'], $dbSelf) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 }
 
 
 // connect to target db
 $dbTarget = @mysql_connect(
-    $GLOBALS['SAIL_SETTINGS']->db_target->host,
-    $GLOBALS['SAIL_SETTINGS']->db_target->user,
-    $GLOBALS['SAIL_SETTINGS']->db_target->pass,
+    $GLOBALS['SAIL_SETTINGS']['db_target']['host'],
+    $GLOBALS['SAIL_SETTINGS']['db_target']['user'],
+    $GLOBALS['SAIL_SETTINGS']['db_target']['pass'],
     true // make a new connexion, don't reuse previous
 ) or die('Unable to connect to target DB.<br/>MySQL said: '.mysql_error());
-mysql_select_db($GLOBALS['SAIL_SETTINGS']->db_target->name, $dbTarget) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+mysql_select_db($GLOBALS['SAIL_SETTINGS']['db_target']['name'], $dbTarget) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 
 
 
@@ -155,7 +155,7 @@ function getRecords($db, $table, $where = '1=1', $group = '', $order = '', $limi
 
 function saveBoard($id, $config, $vars){
     global $dbSelf;
-    $table = $GLOBALS['SAIL_SETTINGS']->db_self->prefix . 'board';
+    $table = $GLOBALS['SAIL_SETTINGS']['db_self']['prefix'] . 'board';
     $existing = getRecord($dbSelf, $table, $id);
     if($existing && $id!=='new'){
         $q = 'update '.$table.' set config=\''.addslashes($config).'\', vars=\''.implode(',',$vars).'\' where id=\''.addslashes($id).'\'';
