@@ -94,7 +94,7 @@ var Card = Backbone.View.extend({
     getBaseHtml: function(){
         var html = '<div class="card__tools"><button class="edit-query">📝</button></div>';
         html+='<h2>'+this.title+'</h2>';
-        html+='<div class="card__query"><div class="textarea">'+this.query+'</div></div>';
+        html+='<div class="card__query"><div class="textarea"></div></div>';
         html+='<div class="card__body"><div class="loader"></div></div>';
         return html;
     },
@@ -108,6 +108,7 @@ var Card = Backbone.View.extend({
         });
         this.editor.renderer.setShowGutter(false);
         this.editor.getSession().setMode("ace/mode/mysql");
+        this.editor.setValue(this.query, 1);
 
         // @TODO implement this correctly to add table name completion !
         /*var staticWordCompleter = {

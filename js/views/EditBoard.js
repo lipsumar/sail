@@ -53,7 +53,7 @@ var EditBoard = Backbone.View.extend({
     render: function(){
         var html = `<div class="body__inner">
             <h1 class="body-title">${this.board.get('title')}</h1>
-            <div class="textarea">${this.board.get('config')}</div>
+            <div class="textarea"></div>
             <button class="save">Save</button>
         </div>`;
         this.$el.html(html);
@@ -66,7 +66,7 @@ var EditBoard = Backbone.View.extend({
         this.editor.renderer.setShowGutter(false);
         this.editor.getSession().setMode("ace/mode/yaml");
         this.editor.getSession().setTabSize(2);
-
+        this.editor.setValue(this.board.get('config'), 1);
         return this;
     }
 });
