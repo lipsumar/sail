@@ -9,7 +9,7 @@ Are you good at PHP ? Do you like querying databases ? Come talk to me on Twitte
 
 ## What is it ?
 
-**Sail**...
+**Sail** is a web app to query a database.
 * provides easy ways to navigate a database and share live results;
 * allows to turn query results into graphs;
 * build boards containing multiple result cards.
