@@ -19,19 +19,25 @@ var CardTimeline = Card.extend({
                 ];
             });
 
-            var x = d3.scale.linear()
-                .domain([
-                    d3.min(data, function(d) { return d[0]; }),
-                    d3.max(data, function(d) { return d[0]; })
-                ])
-                .range([ 0, width ]);
+            var x = d3.scale.linear();//d3.time.scale();
+            if(this.opts.scaleX === 'time'){
+                x = d3.time.scale();
+            }
+            x.domain([
+                d3.min(data, function(d) { return d[0]; }),
+                d3.max(data, function(d) { return d[0]; })
+            ])
+            .range([ 0, width ]);
 
-            var y = d3.scale.linear()
-                .domain([
-                    d3.min(data, function(d) { return d[1]; }),
-                    d3.max(data, function(d) { return d[1]; })
-                ])
-                .range([ height, 0 ]);
+            var y = d3.scale.linear();
+            if(this.opts.scaleY === 'time'){
+                y = d3.time.scale();
+            }
+            y.domain([
+                d3.min(data, function(d) { return d[1]; }),
+                d3.max(data, function(d) { return d[1]; })
+            ])
+            .range([ height, 0 ]);
 
             this.$('.card__body').empty();
             var chart = d3.select(this.$('.card__body')[0])

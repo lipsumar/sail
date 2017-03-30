@@ -58,6 +58,10 @@ Queries can be rendered as a simple table (default) or using special cards:
 
 ![Screenshot of a count](http://lipsumarium.com/images-Sail/card-scatterplot.png)
 
+#### CardScatterPlot options
+* scaleX: `linear` (default) or `time`. If `time`, be sure to pass timestamps in milliseconds.
+* scaleY: `linear` (default) or `time`. If `time`, be sure to pass timestamps in milliseconds.
+
 _More cards are coming !_
 
 
