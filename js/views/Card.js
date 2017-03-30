@@ -7,7 +7,7 @@ var Card = Backbone.View.extend({
     initialize: function(opts){
         this.board = opts.board;
         this.title = opts.title;
-
+        this.opts = opts;
 
         this.updateQuery(opts.query);
         this.tryFetch();
