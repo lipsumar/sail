@@ -4,8 +4,8 @@
 
 **🚧 Alpha version**
 
-📢 🚨   👋 **Help wanted !** 🚨  📢  
-Are you good at PHP ? Do you like querying databases ? Come talk to me on Twitter [@lipsumar](https://twitter.com/lipsumar) or by [email](mailto:piremmanuel@gmail.com) !
+👋 **Help wanted !** 
+Do you do Symfony ? Do you like querying databases ? Come talk to me on Twitter [@lipsumar](https://twitter.com/lipsumar) or by [email](mailto:piremmanuel@gmail.com) !
 
 ## What is it ?
 
