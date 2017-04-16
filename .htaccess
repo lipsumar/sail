@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /sail
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ web/app_dev.php/$1 [L]
+

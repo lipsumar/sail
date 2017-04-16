@@ -1,0 +1,15 @@
+_wdt:
+    resource: '@WebProfilerBundle/Resources/config/routing/wdt.xml'
+    prefix: /sail/_wdt
+
+_profiler:
+    resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
+    prefix: /sail/_profiler
+
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix: /sail/_error
+
+_main:
+    resource: routing.yml
+
