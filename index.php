@@ -27,7 +27,7 @@ require_once('./settings.php');
 </head>
 <body>
 	<div id="app"></div>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="node_modules/d3-timeline/src/d3-timeline.js"></script>
     <script src="./node_modules/ace-builds/src-noconflict/ace.js"></script>
     <script src="./node_modules/ace-builds/src-noconflict/ext-language_tools.js"></script>
