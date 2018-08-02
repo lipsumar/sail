@@ -36,7 +36,7 @@ function getDatabaseTables(){
 function getTableDescription($table){
     global $dbTarget;
 	$describe = array();
-	$query = 'DESCRIBE '.sqle($table);
+	$query = 'DESCRIBE '.sqle($table, $dbTarget);
 	$res = mysqli_query($dbTarget, $query);
 	while($r = mysqli_fetch_assoc($res)){
 		$describe['__fields'][] = $r['Field'];
@@ -47,7 +47,7 @@ function getTableDescription($table){
 }
 
 //sql escape
-function sqle($s){ return mysqli_real_escape_string($s); }
+function sqle($s, $db){ return mysqli_real_escape_string($db, $s); }
 
 //make sure a query has a limit
 function makeLimitedQuery(&$query,&$sqlTree){
