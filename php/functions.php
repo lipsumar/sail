@@ -16,8 +16,7 @@ if($GLOBALS['SAIL_SETTINGS']['db_self']){
 $dbTarget = mysqli_connect(
     $GLOBALS['SAIL_SETTINGS']['db_target']['host'],
     $GLOBALS['SAIL_SETTINGS']['db_target']['user'],
-    $GLOBALS['SAIL_SETTINGS']['db_target']['pass'],
-    true // make a new connexion, don't reuse previous
+    $GLOBALS['SAIL_SETTINGS']['db_target']['pass']
 ) or die('Unable to connect to target DB.<br/>MySQL said: '.mysqli_error());
 mysqli_select_db($dbTarget, $GLOBALS['SAIL_SETTINGS']['db_target']['name']) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 
@@ -27,7 +26,7 @@ function getDatabaseTables(){
     global $dbTarget;
 	$tables = array();
 	$query = 'SHOW tables';
-	$res = mysqli_query($query, $dbTarget);
+	$res = mysqli_query($dbTarget, $query);
 	while($r = mysqli_fetch_array($res)){
 		$tables[$r[0]] = 1;
 	}
@@ -38,7 +37,7 @@ function getTableDescription($table){
     global $dbTarget;
 	$describe = array();
 	$query = 'DESCRIBE '.sqle($table);
-	$res = mysqli_query($query, $dbTarget);
+	$res = mysqli_query($dbTarget, $query);
 	while($r = mysqli_fetch_assoc($res)){
 		$describe['__fields'][] = $r['Field'];
 		$describe[$r['Field']] = $r;
@@ -80,7 +79,7 @@ function execQuery($query){
 
 	$result = array('query'=>$query);
 	$timeBegin = microtime(true);
-	$res = mysqli_query($query, $dbTarget);
+	$res = mysqli_query($dbTarget, $query);
 	$timeEnd = microtime(true);
 	$result['duration_ms'] = ($timeEnd - $timeBegin) * 1000;
 	$mysql_error = mysqli_error();
