@@ -8,7 +8,7 @@ if($GLOBALS['SAIL_SETTINGS']['db_self']){
         $GLOBALS['SAIL_SETTINGS']['db_self']['user'],
         $GLOBALS['SAIL_SETTINGS']['db_self']['pass']
     ) or die('Unable to connect to self DB.<br/>MySQL said: '.mysqli_error());
-    mysqli_select_db($GLOBALS['SAIL_SETTINGS']['db_self']['name'], $dbSelf) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+    mysqli_select_db($dbSelf, $GLOBALS['SAIL_SETTINGS']['db_self']['name']) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 }
 
 
@@ -19,7 +19,7 @@ $dbTarget = mysqli_connect(
     $GLOBALS['SAIL_SETTINGS']['db_target']['pass'],
     true // make a new connexion, don't reuse previous
 ) or die('Unable to connect to target DB.<br/>MySQL said: '.mysqli_error());
-mysqli_select_db($GLOBALS['SAIL_SETTINGS']['db_target']['name'], $dbTarget) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
+mysqli_select_db($dbTarget, $GLOBALS['SAIL_SETTINGS']['db_target']['name']) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 
 
 
