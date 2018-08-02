@@ -111,7 +111,7 @@ function countQuery($query,$sqlTree){
     //small security. need to handle more cases (all actually)...
     if(preg_match('/^select \\*[\\s\\S]*?from/i',$query)){
         $query = preg_replace('/^select \\*[\\s\\S]*?from/i','select count(*) as total from',$query);
-        $res = mysqli_query($query, $dbTarget);
+        $res = mysqli_query($dbTarget, $query);
         $mysql_error = mysqli_error();
         if($mysql_error){
             return false;
@@ -121,7 +121,7 @@ function countQuery($query,$sqlTree){
     }
 
 	//...so we don't end up doing this
-	$res = mysqli_query($query, $dbTarget);
+	$res = mysqli_query($dbTarget, $query);
 	$mysql_error = mysqli_error();
 	if($mysql_error==''){
 		return mysqli_num_rows($res);
@@ -134,7 +134,7 @@ function getRecord($db, $table, $uid, $uidField = 'id', $andWhere = '')
 {
     $q = 'select * from ' . $table . ' where ' . $uidField . '=\'' . $uid . '\' ' . $andWhere . ' limit 1';
     //echo $q;
-    $res = mysqli_query($q, $db);
+    $res = mysqli_query($db, $q);
 
     return mysqli_fetch_assoc($res);
 }
@@ -142,7 +142,7 @@ function getRecords($db, $table, $where = '1=1', $group = '', $order = '', $limi
 {
     $q = 'select * from ' . $table . ' where ' . $where . ' ' . $group . ' ' . $order . ($limit > 0 ? 'limit ' . $limit : '');
     //echo $q;
-    $res = mysqli_query($q, $db);
+    $res = mysqli_query($db, $q);
     $re = [];
     while ($r = mysqli_fetch_assoc($res)) {
         $re[] = $r;
@@ -165,7 +165,7 @@ function saveBoard($id, $config, $vars){
         $q = 'insert into '.$table.' set id=\''.$id.'\', crdate='.time().', config=\''.addslashes($config).'\', vars=\''.implode(',',$vars).'\'';
     }
 
-    if(mysqli_query($q, $dbSelf)){
+    if(mysqli_query($dbSelf, $q)){
         return $id;
     }
     return false;
