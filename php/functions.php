@@ -7,7 +7,7 @@ if($GLOBALS['SAIL_SETTINGS']['db_self']){
         $GLOBALS['SAIL_SETTINGS']['db_self']['host'],
         $GLOBALS['SAIL_SETTINGS']['db_self']['user'],
         $GLOBALS['SAIL_SETTINGS']['db_self']['pass']
-    ) or die('Unable to connect to self DB.<br/>MySQL said: '.mysqli_error());
+    ) or die('Unable to connect to self DB.<br/>MySQL said: '.mysqli_error($dbSelf));
     mysqli_select_db($dbSelf, $GLOBALS['SAIL_SETTINGS']['db_self']['name']) or die('Connected to self DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 }
 
@@ -17,7 +17,7 @@ $dbTarget = mysqli_connect(
     $GLOBALS['SAIL_SETTINGS']['db_target']['host'],
     $GLOBALS['SAIL_SETTINGS']['db_target']['user'],
     $GLOBALS['SAIL_SETTINGS']['db_target']['pass']
-) or die('Unable to connect to target DB.<br/>MySQL said: '.mysqli_error());
+) or die('Unable to connect to target DB.<br/>MySQL said: '.mysqli_error($dbTarget));
 mysqli_select_db($dbTarget, $GLOBALS['SAIL_SETTINGS']['db_target']['name']) or die('Connected to target DB, but unable to select database.<br/>MySQL said: '.mysql_error());
 
 
@@ -82,7 +82,7 @@ function execQuery($query){
 	$res = mysqli_query($dbTarget, $query);
 	$timeEnd = microtime(true);
 	$result['duration_ms'] = ($timeEnd - $timeBegin) * 1000;
-	$mysql_error = mysqli_error();
+	$mysql_error = mysqli_error($dbTarget);
 	if($mysql_error!=''){
 		$result['sql_error'] = $mysql_error;
 	}else{
@@ -112,7 +112,7 @@ function countQuery($query,$sqlTree){
     if(preg_match('/^select \\*[\\s\\S]*?from/i',$query)){
         $query = preg_replace('/^select \\*[\\s\\S]*?from/i','select count(*) as total from',$query);
         $res = mysqli_query($dbTarget, $query);
-        $mysql_error = mysqli_error();
+        $mysql_error = mysqli_error($dbTarget);
         if($mysql_error){
             return false;
         }
@@ -122,7 +122,7 @@ function countQuery($query,$sqlTree){
 
 	//...so we don't end up doing this
 	$res = mysqli_query($dbTarget, $query);
-	$mysql_error = mysqli_error();
+	$mysql_error = mysqli_error($dbTarget);
 	if($mysql_error==''){
 		return mysqli_num_rows($res);
 	}
