@@ -1,10 +1,8 @@
 module.exports = {
   "parserOptions":{
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "sourceType": "module"
   },
-  "sourceType": "module",
-  "impliedStrict": true,
-  "ecmaFeatures":{},
   "env":{
     "browser": true
   },
