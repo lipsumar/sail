@@ -4,7 +4,8 @@ var Backbone = require('backbone'),
     BoardView = require('./Board'),
     BoardModel = require('../models/Board'),
     EditBoardView = require('./EditBoard'),
-    BoardsView = require('./Boards');
+    BoardsView = require('./Boards'),
+    BrowseView = require('./Browse');
 
 var App = Backbone.View.extend({
 
@@ -15,9 +16,8 @@ var App = Backbone.View.extend({
         router.on('route:board', this.board.bind(this));
         router.on('route:editBoard', this.editBoard.bind(this));
         router.on('route:boards', this.boards.bind(this));
+        router.on('route:browse', this.browse.bind(this));
         this.router = router;
-
-
     },
 
     index: function(){
@@ -28,8 +28,10 @@ var App = Backbone.View.extend({
     console: function(){
         this.showBody('console');
         this.activeMenu('console');
-        this.consoleView = new ConsoleView();
-        this.$bodyConsole.append(this.consoleView.render().el);
+        if(!this.consoleView){
+            this.consoleView = new ConsoleView();
+            this.$bodyConsole.append(this.consoleView.render().el);
+        }
     },
 
     boards: function(){
@@ -88,6 +90,15 @@ var App = Backbone.View.extend({
         this.editBoardView = editBoardView;
     },
 
+    browse: function () {
+        this.showBody('browse');
+        this.activeMenu('browse');
+        if(!this.browseView){
+            this.browseView = new BrowseView();
+            this.$bodyBrowse.append(this.browseView.render().el);
+        }
+    },
+
     showBody: function(id, opts){
         this.$('.body').hide();
         this.$('.body-'+id).show();
@@ -120,6 +131,9 @@ var App = Backbone.View.extend({
                 <a href="#edit/board/new" data-menu="new" title="New board">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 50 62.5"><g transform="translate(0,-996.3622)"><path style="text-indent:0;text-transform:none;direction:ltr;block-progression:tb;baseline-shift:baseline;enable-background:accumulate;" d="m 25,1042.3622 c -1.6568,0 -3,-1.3431 -3,-3 l 0,-9 -9,0 c -1.65685,0 -3,-1.3431 -3,-3 0,-1.6568 1.34315,-3 3,-3 l 9,0 0,-9 c 0,-1.6568 1.3432,-3 3,-3 1.6569,0 3,1.3432 3,3 l 0,9 9,0 c 1.65685,0 3,1.3432 3,3 0,1.6569 -1.34315,3 -3,3 l -9,0 0,9 c 0,1.6569 -1.3431,3 -3,3 z" fill-opacity="1" stroke="none" marker="none" visibility="visible" display="inline" overflow="visible"/></g></svg>
                 </a>
+                <a href="#browse" data-menu="browse" title="Browse">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve"><path style="stroke-width:2px" d="M45.714,24.323c-1.912,0-3.479,1.433-3.727,3.277H31.396c-0.184-2.983-1.98-5.531-4.533-6.785l2.328-8.82  c0.135,0.011,0.265,0.041,0.401,0.041c2.767,0,5.019-2.251,5.019-5.018S32.358,2,29.593,2c-2.768,0-5.019,2.251-5.019,5.018  c0,2.282,1.54,4.191,3.63,4.798l-2.271,8.612c-0.826-0.283-1.709-0.445-2.629-0.445c-2.479,0-4.701,1.121-6.191,2.879l-6.503-4.399  c0.293-0.656,0.464-1.378,0.464-2.143c0-2.913-2.37-5.283-5.284-5.283c-2.913,0-5.283,2.37-5.283,5.283  c0,2.914,2.37,5.283,5.283,5.283c1.791,0,3.371-0.899,4.327-2.267l6.397,4.329c-0.837,1.277-1.328,2.798-1.328,4.437  c0,3.729,2.532,6.871,5.963,7.818l-1.838,6.166c-0.15-0.023-0.303-0.047-0.459-0.047c-1.644,0-2.98,1.338-2.98,2.979  c0,1.645,1.337,2.982,2.98,2.982s2.98-1.338,2.98-2.982c0-1.131-0.643-2.105-1.575-2.609l1.875-6.285  c0.384,0.057,0.772,0.096,1.171,0.096c4.307,0,7.832-3.375,8.092-7.617h10.592c0.248,1.844,1.814,3.277,3.728,3.277  c2.083,0,3.778-1.695,3.778-3.777C49.493,26.018,47.797,24.323,45.714,24.323z M25.574,7.019C25.574,4.804,27.377,3,29.593,3  c2.215,0,4.018,1.802,4.018,4.018s-1.803,4.018-4.018,4.018C27.377,11.036,25.574,9.233,25.574,7.019z M5.789,20.602  c-2.362,0-4.283-1.92-4.283-4.283c0-2.362,1.921-4.283,4.283-4.283s4.284,1.921,4.284,4.283  C10.073,18.682,8.151,20.602,5.789,20.602z M18.851,47c-1.092,0-1.979-0.889-1.979-1.98s0.888-1.979,1.979-1.979  s1.981,0.887,1.981,1.979S19.942,47,18.851,47z M23.304,35.219c-3.926,0-7.119-3.193-7.119-7.117c0-3.925,3.193-7.119,7.119-7.119  c3.924,0,7.117,3.193,7.117,7.119C30.421,32.025,27.228,35.219,23.304,35.219z M45.714,30.879c-1.531,0-2.777-1.246-2.777-2.777  c0-1.533,1.246-2.779,2.777-2.779c1.532,0,2.778,1.246,2.778,2.779C48.492,29.633,47.246,30.879,45.714,30.879z"/></svg>
+                </a>
             </div>
         </div>
         <div class="main">
@@ -129,16 +143,19 @@ var App = Backbone.View.extend({
                     <div class="body-menu__item body-menu__item--console">Craft queries in the console</div>
                     <div class="body-menu__item body-menu__item--board">View existing boards</div>
                     <div class="body-menu__item body-menu__item--new">Create a new board</div>
+                    <div class="body-menu__item body-menu__item--new">Browse</div>
                 </div>
             </div>
             <div class="body body-console" style="display:none"></div>
             <div class="body body-board" style="display:none"></div>
+            <div class="body body-browse" style="display:none"></div>
             <div class="body body-generic" style="display:none"></div>
         </div>`;
         this.$el.html(html);
         this.$bodyConsole = this.$('.body-console');
         this.$bodyBoard = this.$('.body-board');
         this.$bodyGeneric = this.$('.body-generic');
+        this.$bodyBrowse = this.$('.body-browse');
 
         if(!window.SailOptions.dbSelf){
             this.$('[data-menu="board"], [data-menu="new"]').hide();

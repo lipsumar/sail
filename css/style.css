@@ -80,6 +80,7 @@ a{
     font-size:23px;
     margin-bottom:1em;
     fill:#B0BEC5;
+    stroke:#B0BEC5;
 }
 .sidebar__menu a svg{
     width:30px;
@@ -88,6 +89,7 @@ a{
     background-color:#B0BEC5;
     fill:#607D8B;
     color:#607D8B;
+    stroke:#607D8B;
 }
 .main{
     flex:auto;
@@ -201,6 +203,9 @@ a{
 .body-generic, .body-board{
     overflow: scroll;
     padding-bottom:1em;
+}
+.body-browse{
+    position: relative;
 }
 .body__inner{
     padding-left: 2em;
@@ -663,4 +668,142 @@ table td{
 circle {
     fill: steelblue;
     fill-opacity:0.5;
+}
+
+
+
+
+
+.browse-canvas{
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    background-image: url(../images/grid.svg);
+    overflow:auto;
+}
+
+.browse-node{
+    position: absolute;
+    min-width:200px;
+    max-width:400px;
+    background-color: #FFF;
+    padding:10px;
+    padding-bottom:6px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    user-select: none;
+}
+.browse-node--input input{
+    margin-top:5px;
+    margin-left: 10px;
+}
+
+.browse-node__title{
+    font-weight: bold;
+}
+
+.browse-node__top{
+    display: flex;
+    margin-top:-12px;
+}
+.browse-node__body{
+    position: relative;
+}
+.browse-node__bottom{
+    position: relative;
+}
+
+.browse-node-inlet{
+    margin-left:10px;
+}
+.browse-node-inlet__target{
+    width:10px;
+    height:10px;
+    background-color: steelblue;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.browse-node-inlet__name{
+    font-size: 12px;
+}
+.browse-node-inlet-add{
+    margin-left:6px;
+}
+
+.browse-node-inlet-add line{
+    stroke:steelblue;
+    stroke-width: 1px;
+}
+.browse-node-inlet-add svg{
+    position: relative;
+    top:6px;
+}
+
+.browse-node-outlet{
+    position: absolute;
+    width:10px;
+    height:10px;
+    background-color: steelblue;
+    left:50%;
+    margin-left: -5px;
+    top:2px;
+    cursor: pointer;
+}
+
+
+.browse-node-handle{
+    width:15px;
+    height: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: flex-end;
+    opacity: 0.4;
+    cursor: grab;
+}
+.browse-node-handle > div{
+    width:100%;
+    height:2px;
+    background-color: steelblue;
+}
+
+.browse-node table th{
+    font-size: 14px;
+    padding:1px 2px;
+}
+.browse-node table td{
+    font-size: 14px;
+    padding:1px 2px;
+}
+
+.browse-node-table-add-column{
+    position: absolute;
+    top:0;
+    right:0;
+}
+
+
+
+.browse-edge{
+    position: absolute;
+    cursor-events:none;
+}
+.browse-edge__inner{
+    position: relative;
+}
+.browse-edge__line-svg{
+    pointer-events: none;
+}
+.browse-edge__line-svg,
+.browse-edge__handle-svg{
+    position: absolute;
+    top:0;
+    left:0;
+}
+.browse-edge__handle{
+    opacity: 0;
+}
+.browse-edge:hover .browse-edge__handle{
+    opacity: 1;
 }

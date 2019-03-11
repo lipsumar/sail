@@ -30,6 +30,10 @@ var TableContextMenu = FilteredListBase.extend({
         }else{
             this.selectedTable = item;
             this.showFields(item);
+            this.trigger('table-select', {
+                table: this.selectedTable,
+                value: this.value
+            });
         }
 
     },
@@ -75,6 +79,7 @@ var TableContextMenu = FilteredListBase.extend({
             return '<div class="table-context-menu__field list-item" title="'+f+'" data-index="'+i+'">'+f+'</div>';
         }).join('');
         this.$('.table-context-menu__fields .table-context-menu__scroll').html(html);
+        return this;
     },
 
     getKeyboardFocusedTable: function(){
@@ -98,6 +103,7 @@ var TableContextMenu = FilteredListBase.extend({
             right = x + WIDTH - 10;
         }
 
+        this.position = {x:x, y:y};
         this.$el.css({
             left: x,
             top: y,
@@ -105,6 +111,10 @@ var TableContextMenu = FilteredListBase.extend({
         });
 
         return this;
+    },
+
+    getPosition: function(){
+        return this.position;
     },
 
     setValue: function(value){
@@ -125,6 +135,7 @@ var TableContextMenu = FilteredListBase.extend({
         this.$('.table-context-menu__selected-table').hide();
         this.$('.table-context-menu__table').show();
         this.showingFields = false;
+        this.trigger('hidden');
     },
 
     render: function(){
