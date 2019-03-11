@@ -4,7 +4,8 @@ var Backbone = require('backbone'),
     BrowseNodeTable = require('./BrowseNodeTable'),
     BrowseNodeInput = require('./BrowseNodeInput'),
     BrowseEdge = require('./BrowseEdge'),
-    MouseNode = require('./BrowserMouseNode');
+    MouseNode = require('./BrowserMouseNode'),
+    BrowseNodeMacro = require('./BrowseNodeMacro');
 
 var Browse = Backbone.View.extend({
     className: 'browse',
@@ -19,7 +20,8 @@ var Browse = Backbone.View.extend({
     },
 
     events: {
-        'contextmenu .browse-canvas': 'canvasContextMenu'
+        'contextmenu .browse-canvas': 'canvasContextMenu',
+        'dblclick .browse-canvas': 'canvasDblClick'
     },
 
     canvasContextMenu(e){
@@ -27,6 +29,25 @@ var Browse = Backbone.View.extend({
         this.contextMenu
             .setPosition(e.clientX, e.clientY)
             .show();
+    },
+
+    canvasDblClick(e){
+        e.preventDefault();
+        this.addMacroNode({
+            name: 'the macro',
+            inlets: [
+                {
+                    name: 'product_id',
+                    field: 'translatable_id'
+                },
+                'company_id',
+                'locale'
+            ],
+            query: 'select pt.name, pt.locale from product_translation pt join product p on p.id=pt.translatable_id WHERE {inlets}'
+        }, {
+            x: e.clientX - 110,
+            y: e.clientY
+        });
     },
 
     tableSelected(e){
@@ -45,6 +66,18 @@ var Browse = Backbone.View.extend({
             },
             contextMenu: this.contextMenu
         });
+        this.addNode(node);
+    },
+
+    addMacroNode(macro, position){
+        var node = new BrowseNodeMacro({
+            macro,
+            position
+        });
+        this.addNode(node);
+    },
+
+    addNode(node){
         node.on('inlet-clicked', (e) => {
             if(this.currentEdge){
                 this.setEdgeToInlet(node, e.field);
@@ -54,6 +87,11 @@ var Browse = Backbone.View.extend({
         });
         node.on('outlet-clicked', node => {
             this.addEdgeFromOutlet(node);
+        });
+        node.on('remove', () => {
+            node.off('outlet-clicked');
+            node.off('inlet-clicked');
+            node.$el.remove();
         });
         this.$('.browse__nodes').append(node.render().el);
     },

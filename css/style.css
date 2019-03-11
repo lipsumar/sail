@@ -687,13 +687,36 @@ circle {
 .browse-node{
     position: absolute;
     min-width:200px;
-    max-width:400px;
+    max-width:600px;
     background-color: #FFF;
-    padding:10px;
-    padding-bottom:6px;
+
+
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     user-select: none;
 }
+.browse-node__inner{
+    position: relative;
+    padding:10px;
+    padding-bottom:6px;
+}
+.browse-node__close{
+
+    position: absolute;
+    top:-5px;
+    left:-5px;
+    width:12px;
+    height: 12px;
+    background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6' style='stroke:black;'><line x1='0' y1='0' x2='6' y2='6'/><line x1='6' y1='0' x2='0' y2='6'/></svg>") no-repeat center center;
+
+    border-radius: 99px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    display:none;
+    cursor: pointer;
+}
+.browse-node:hover .browse-node__close{
+    display:block;
+}
+
 .browse-node--input input{
     margin-top:5px;
     margin-left: 10px;
@@ -709,6 +732,7 @@ circle {
 }
 .browse-node__body{
     position: relative;
+    overflow: auto;
 }
 .browse-node__bottom{
     position: relative;
@@ -730,7 +754,6 @@ circle {
 .browse-node-inlet-add{
     margin-left:6px;
 }
-
 .browse-node-inlet-add line{
     stroke:steelblue;
     stroke-width: 1px;
@@ -738,6 +761,10 @@ circle {
 .browse-node-inlet-add svg{
     position: relative;
     top:6px;
+}
+.browse-node-inlet-none{
+    width:2px;
+    height:27px;
 }
 
 .browse-node-outlet{

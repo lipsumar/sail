@@ -8,16 +8,21 @@ var BrowseNodeTable = BrowseNodeBase.extend({
         BrowseNodeBase.prototype.initialize.call(this, opts);
         this.tableName = opts.tableName;
         this.table = opts.table;
-        console.log(this.table);
         this.loaded = false;
         this.error = null;
         this.rows = null;
-        this.edges = [];
-        this.inlets = [];
-        this.selectFields = ['id'];
+        this.selectFields = [];
+        if(this.table.__fields.includes('id')){
+            this.inlets.push('id');
+            this.selectFields.push('id');
+        }
         if(this.table.__fields.includes('name')){
             this.inlets.push('name');
             this.selectFields.push('name');
+        }
+        if(this.selectFields.length === 0){
+            let defaultField = this.table.__fields[0];
+            this.selectFields.push(defaultField);
         }
         this.contextMenu = opts.contextMenu;
         this.contextMenu.on('field-select', e => {
@@ -35,32 +40,13 @@ var BrowseNodeTable = BrowseNodeBase.extend({
     },
 
     events: Object.assign({
-        'click .browse-node-inlet__target': 'inletClicked',
         'click .browse-node-inlet-add': 'inletAddClicked',
         'click .browse-node-table-add-column': 'addColumnClicked'
     }, BrowseNodeBase.prototype.events),
 
-    addEdge(edge, field){
-        this.edges[field] = edge;
-        edge.on('value-updated', this.update.bind(this));
-        this.update();
-    },
-
-    addInlet(field){
-        this.inlets.push(field);
-        this.render();
-    },
-
     addColumn(field){
         this.selectFields.push(field);
         this.fetch().then(this.render.bind(this));
-    },
-
-    removeEdge(field){
-        this.edges[field].off('value-updated');
-        delete this.edges[field];
-
-        this.update();
     },
 
     fetch(){
@@ -104,14 +90,6 @@ var BrowseNodeTable = BrowseNodeBase.extend({
         return query;
     },
 
-    inletClicked(e){
-        e.preventDefault();
-        this.trigger('inlet-clicked', {
-            field: e.currentTarget.parentNode.getAttribute('data-field'),
-            node: this
-        });
-    },
-
     inletAddClicked(e){
         e.preventDefault();
         e.stopPropagation();
@@ -142,19 +120,7 @@ var BrowseNodeTable = BrowseNodeBase.extend({
 
     },
 
-    getInletPosition(field){
-        const $el = this.$el.find('.browse-node-inlet[data-field="'+field+'"]');
-        var pos = this.getPosition();
-        var elPos = $el.position();
-        var elWidth = parseInt($el.outerWidth(), 10);
-        return {
-            x: pos.x + elPos.left + elWidth/2 + 10,
-            y: pos.y + elPos.top
-        };
-    },
-
     update(){
-        console.log('update()');
         this.fetch().then(this.render.bind(this));
     },
 
@@ -167,17 +133,15 @@ var BrowseNodeTable = BrowseNodeBase.extend({
           </div>`).join('');
 
         var html = `
+        <div class="browse-node__inner">
+          <div class="browse-node__close"></div>
           <div class="browse-node__top">
             <div class="browse-node-handle">
               <div></div>
               <div></div>
               <div></div>
             </div>
-            <div class="browse-node-inlet" data-field="id">
-              <div class="browse-node-inlet__target"></div>
-              <div class="browse-node-inlet__name">id</div>
-            </div>
-            ${inletsHtml}
+            ${inletsHtml || '<div class="browse-node-inlet-none"></div>'}
             <div class="browse-node-inlet-add">
               <svg width="8" height="8" >
                 <line x1="4" y1="0" x2="4" y2="8"/>
@@ -190,7 +154,8 @@ var BrowseNodeTable = BrowseNodeBase.extend({
           <div class="browse-node__bottom">
             <div class="browse-node-outlet"></div>
           </div>
-          `;
+        </div>
+        `;
         this.$el.html(html);
 
         this.renderBody();

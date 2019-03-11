@@ -35,6 +35,7 @@ var BrowseNodeInput = BrowseNodeBase.extend({
         this.setPosition(this.position.x, this.position.y);
 
         var html = `
+        <div class="browse-node__inner">
           <div class="browse-node__top">
             <div class="browse-node-handle">
               <div></div>
@@ -47,7 +48,7 @@ var BrowseNodeInput = BrowseNodeBase.extend({
           <div class="browse-node__bottom">
             <div class="browse-node-outlet"></div>
           </div>
-          `;
+        </div>`;
         this.$el.html(html);
 
         return this;

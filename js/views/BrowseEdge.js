@@ -55,7 +55,7 @@ var BrowseEdge = Backbone.View.extend({
         var html = `
         <div class="browse-edge__inner">
           <svg width="${width}" height="${height}" class="browse-edge__line-svg">
-            <line x1="${fromPos.x > toPos.x ? width : 0}" y1="0" x2="${fromPos.x > toPos.x ? 0 : width}" y2="${height}" stroke="steelblue" stroke-width="2" />
+            <line x1="${fromPos.x > toPos.x ? width : 0}" y1="${fromPos.y<toPos.y ? 0 : height}" x2="${fromPos.x > toPos.x ? 0 : width}" y2="${fromPos.y<toPos.y ? height : 0}" stroke="steelblue" stroke-width="2" />
           </svg>
           <svg width="10" height="10" class="browse-edge__handle-svg" style="top:${height/2-5}px;left:${width/2-5}px">
             <circle cx="5" cy="5" r="5" stroke="none" fill="steelblue" class="browse-edge__handle" />

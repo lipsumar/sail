@@ -6,12 +6,16 @@ var BrowseNode = Backbone.View.extend({
     initialize: function(opts){
         this.position = opts.position;
         $(document.body).on('mousemove', this.onMouseMove.bind(this));
+        this.edges = [];
+        this.inlets = [];
     },
 
     events: {
         'mousedown .browse-node-handle': 'startDrag',
         'mouseup .browse-node-handle': 'endDrag',
-        'click .browse-node-outlet': 'onOutletClicked'
+        'click .browse-node-outlet': 'onOutletClicked',
+        'click .browse-node-inlet__target': 'inletClicked',
+        'click .browse-node__close': 'remove'
     },
 
     onOutletClicked(){
@@ -37,6 +41,26 @@ var BrowseNode = Backbone.View.extend({
         }
     },
 
+    inletClicked(e){
+        e.preventDefault();
+        this.trigger('inlet-clicked', {
+            field: e.currentTarget.parentNode.getAttribute('data-field'),
+            node: this
+        });
+    },
+
+
+    getInletPosition(field){
+        const $el = this.$el.find('.browse-node-inlet[data-field="'+field+'"]');
+        var pos = this.getPosition();
+        var elPos = $el.position();
+        var elWidth = parseInt($el.outerWidth(), 10);
+        return {
+            x: pos.x + elPos.left + elWidth/2 + 10,
+            y: pos.y + elPos.top
+        };
+    },
+
     setPosition(x, y){
         this.position = {x, y};
         this.$el.css({
@@ -57,6 +81,31 @@ var BrowseNode = Backbone.View.extend({
             x: this.position.x + width/2,
             y: this.position.y + height
         };
+    },
+
+    addEdge(edge, field){
+        this.edges[field] = edge;
+        edge.on('value-updated', this.update.bind(this));
+        this.update();
+    },
+
+
+    addInlet(field){
+        this.inlets.push(field);
+        this.render();
+    },
+
+    removeEdge(field){
+        this.edges[field].off('value-updated');
+        delete this.edges[field];
+        this.update();
+    },
+
+    remove(){
+        for(let field in this.edges){
+            this.edges[field].remove();
+        }
+        this.trigger('remove');
     }
 
 });
