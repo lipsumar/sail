@@ -1,6 +1,8 @@
 var BrowseNodeBase = require('./BrowseNode'),
     $ = require('jquery'),
-    TableView = require('./Table');
+    JoinTable = require('./JoinTable'),
+    TableContextMenu = require('../TableContextMenu'),
+    TableJoinModel = require('./TableJoinModel');
 
 var BrowseNodeTable = BrowseNodeBase.extend({
 
@@ -8,22 +10,20 @@ var BrowseNodeTable = BrowseNodeBase.extend({
         BrowseNodeBase.prototype.initialize.call(this, opts);
         this.tableName = opts.tableName;
         this.table = opts.table;
+        this.tables = opts.tables;
         this.loaded = false;
         this.error = null;
         this.rows = null;
-        this.selectFields = [];
+
+        this.tableJoinModel = new TableJoinModel({allTables: this.tables});
+        this.tableJoinModel.setTable(this.tableName);
         if(this.table.__fields.includes('id')){
             this.inlets.push('id');
-            this.selectFields.push('id');
         }
         if(this.table.__fields.includes('name')){
             this.inlets.push('name');
-            this.selectFields.push('name');
         }
-        if(this.selectFields.length === 0){
-            let defaultField = this.table.__fields[0];
-            this.selectFields.push(defaultField);
-        }
+        this.selectFields = this.tableJoinModel.getDefaultSelectFields(this.tableName);
         this.contextMenu = opts.contextMenu;
         this.contextMenu.on('field-select', e => {
             if(this.contextMenuHandler){
@@ -36,16 +36,23 @@ var BrowseNodeTable = BrowseNodeBase.extend({
                 this.contextMenuOpen = false;
             }
         });
+        this.joinTable = new JoinTable({
+            tables: window.Sail_tables
+        });
         this.update();
     },
 
     events: Object.assign({
         'click .browse-node-inlet-add': 'inletAddClicked',
-        'click .browse-node-table-add-column': 'addColumnClicked'
+        'click .browse-node-table-add-column': 'addColumnClicked',
+        'click .join-table__add-join': 'addJoinClicked'
     }, BrowseNodeBase.prototype.events),
+
+
 
     addColumn(field){
         this.selectFields.push(field);
+        this.tableJoinModel.addField(this.tableName, field);
         this.fetch().then(this.render.bind(this));
     },
 
@@ -62,25 +69,29 @@ var BrowseNodeTable = BrowseNodeBase.extend({
             self.loaded = true;
             self.error = resp.error;
             self.rows = resp.rows;
-            self.value = resp.rows.map(r => r.id);
+            if(resp.rows instanceof Array){
+                self.value = resp.rows.map(r => r.id);
+            }else{
+                self.value = null;
+            }
+
             self.trigger('value-updated', self.value);
         });
     },
 
     getQuery(){
-        let query = `SELECT ${this.selectFields.join(', ')} from ${this.tableName}`;
+        let query = this.tableJoinModel.getQuery();
 
         const where = [];
         for(let field in this.edges){
             let value = this.edges[field].getValue();
             if(value instanceof Array){
-                where.push(`${field} IN ('${value.join('\',\'')}')`);
+                where.push(`_t.${field} IN ('${value.join('\',\'')}')`);
             }else if(this.table[field].Type.includes('varchar')){
-                where.push(`${field} LIKE '%${value}%'`);
+                where.push(`_t.${field} LIKE '%${value}%'`);
             }else{
-                where.push(`${field} = '${value}'`);
+                where.push(`_t.${field} = '${value}'`);
             }
-
         }
 
         if(where.length>0){
@@ -120,6 +131,35 @@ var BrowseNodeTable = BrowseNodeBase.extend({
 
     },
 
+    addJoinClicked(e){
+        e.preventDefault();
+        e.stopPropagation();
+        this.contextMenuHandler = e => {
+            this.setupJoinTableSelection(e.field);
+        };
+        this.contextMenu
+            .setPosition(e.clientX, e.clientY)
+            .showFields(this.tableName)
+            .show();
+        this.contextMenuOpen = true;
+
+    },
+
+    setupJoinTableSelection(field){
+        const tableMenu = new TableContextMenu({
+            displayRelative: true
+        });
+
+        this.$('td.join-table__add-join').append(tableMenu.render().el);
+        tableMenu.setTables(this.tables);
+        tableMenu.show();
+        tableMenu.on('field-select', e => {
+            tableMenu.$el.remove();
+            this.tableJoinModel.addTable(field, e.table, e.field);
+            this.update();
+        });
+    },
+
     update(){
         this.fetch().then(this.render.bind(this));
     },
@@ -149,7 +189,7 @@ var BrowseNodeTable = BrowseNodeBase.extend({
               </svg>
             </div>
           </div>
-          <div class="browse-node__title">${this.tableName}</div>
+
           <div class="browse-node__body"></div>
           <div class="browse-node__bottom">
             <div class="browse-node-outlet"></div>
@@ -177,12 +217,9 @@ var BrowseNodeTable = BrowseNodeBase.extend({
             return;
         }
 
-        var fields = this.rows[0] ? Object.keys(this.rows[0]) : [];
-        var table = new TableView({
-            rows: this.rows,
-            fields
-        });
-        this.$('.browse-node__body').empty().append(table.render().el);
+        this.joinTable.setModel(this.tableJoinModel);
+        this.joinTable.setRows(this.rows);
+        this.$('.browse-node__body').empty().append(this.joinTable.render().el);
         this.$('.browse-node__body').append('<div class="browse-node-table-add-column">+</div>');
     }
 });

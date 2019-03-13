@@ -1,6 +1,6 @@
 var BrowseNodeBase = require('./BrowseNode'),
     $ = require('jquery'),
-    TableView = require('./Table');
+    TableView = require('../Table');
 
 var BrowseNodeMacro = BrowseNodeBase.extend({
 

@@ -5,7 +5,7 @@ var Backbone = require('backbone'),
     BoardModel = require('../models/Board'),
     EditBoardView = require('./EditBoard'),
     BoardsView = require('./Boards'),
-    BrowseView = require('./Browse');
+    BrowseView = require('./Browse/Browse');
 
 var App = Backbone.View.extend({
 

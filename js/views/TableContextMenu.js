@@ -6,10 +6,11 @@ var WIDTH = 220;
 var TableContextMenu = FilteredListBase.extend({
     className: 'table-context-menu',
 
-    initialize: function(){
+    initialize: function(opts = {}){
         FilteredListBase.prototype.initialize.call(this);
         $(document.body).on('click', this.hide.bind(this));
         $(document).bind('keydown', 'esc', this.hide.bind(this));
+        this.displayRelative = opts.displayRelative || false;
     },
 
     events: Object.assign({
@@ -140,6 +141,9 @@ var TableContextMenu = FilteredListBase.extend({
 
     render: function(){
         if(!this.rendered){
+            if(this.displayRelative){
+                this.$el.addClass('table-context-menu--display-relative');
+            }
             var html = `
             <div class="table-context-menu__search">
                 <input type="search" />

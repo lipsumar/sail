@@ -1,6 +1,6 @@
 var Backbone = require('backbone'),
     $ = require('jquery'),
-    TableContextMenu = require('./TableContextMenu'),
+    TableContextMenu = require('../TableContextMenu'),
     BrowseNodeTable = require('./BrowseNodeTable'),
     BrowseNodeInput = require('./BrowseNodeInput'),
     BrowseEdge = require('./BrowseEdge'),
@@ -60,6 +60,7 @@ var Browse = Backbone.View.extend({
         var node = new BrowseNodeTable({
             tableName: table,
             table: this.tables[table],
+            tables: this.tables,
             position: {
                 x: pos.x - 110,
                 y: pos.y
