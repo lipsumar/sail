@@ -52,10 +52,28 @@ var BrowseEdge = Backbone.View.extend({
         var width = Math.abs(fromPos.x - toPos.x);
         var height = Math.abs(fromPos.y - toPos.y);
 
+        var path = `<path d="M ${fromPos.x > toPos.x ? width : 0} ${fromPos.y<toPos.y ? 0 : height} l 0 ${fromPos.y<toPos.y ? height/2 : -height/2} l ${fromPos.x > toPos.x ? -width : width} 0 l 0 ${fromPos.y<toPos.y ? height/2 : -height/2}"
+            transform="translate(1, 10)"
+            stroke="steelblue"
+            stroke-width="2"
+            fill="none"
+        />`;
+        if(fromPos.y > toPos.y){
+            path = `<path d="M ${fromPos.x > toPos.x ? width : 0} ${height} l 0 10 l ${fromPos.x > toPos.x ? -width/2 : width/2} 0 L ${width/2} -10 l ${fromPos.x > toPos.x ? -width/2 : width/2} 0 l 0 10"
+                transform="translate(1, 11)"
+                stroke="steelblue"
+                stroke-width="2"
+                fill="none"
+            />`;
+        }
+
         var html = `
         <div class="browse-edge__inner">
-          <svg width="${width}" height="${height}" class="browse-edge__line-svg">
-            <line x1="${fromPos.x > toPos.x ? width : 0}" y1="${fromPos.y<toPos.y ? 0 : height}" x2="${fromPos.x > toPos.x ? 0 : width}" y2="${fromPos.y<toPos.y ? height : 0}" stroke="steelblue" stroke-width="2" />
+          <svg width="${width+2}" height="${height+10+10+2}" class="browse-edge__line-svg">
+            <!--<line x1="${fromPos.x > toPos.x ? width : 0}" y1="${fromPos.y<toPos.y ? 0 : height}" x2="${fromPos.x > toPos.x ? 0 : width}" y2="${fromPos.y<toPos.y ? height : 0}" stroke="steelblue" stroke-width="2" />-->
+
+
+            ${path}
           </svg>
           <svg width="10" height="10" class="browse-edge__handle-svg" style="top:${height/2-5}px;left:${width/2-5}px">
             <circle cx="5" cy="5" r="5" stroke="none" fill="steelblue" class="browse-edge__handle" />
@@ -66,7 +84,7 @@ var BrowseEdge = Backbone.View.extend({
         this.$el.html(html);
         this.$el.css({
             left: mostLeft.x + 'px',
-            top: mostTop.y + 'px'
+            top: mostTop.y - 10 + 'px'
         });
         return this;
     }

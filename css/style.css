@@ -736,6 +736,7 @@ circle {
 .browse-node__body{
     position: relative;
     overflow: auto;
+    max-height: 80vh;
 }
 .browse-node__bottom{
     position: relative;
@@ -825,6 +826,7 @@ circle {
 }
 .browse-edge__line-svg{
     pointer-events: none;
+    filter: drop-shadow( 0 0 1px rgba(0,0,0,0.2) );
 }
 .browse-edge__line-svg,
 .browse-edge__handle-svg{
@@ -843,15 +845,15 @@ circle {
 
 
 .join-table__add-join{
-    width:10px;
-    background-color: #03A9F4;
+    width:5px;
+    background-color: #96c6ef;
     border-top: none;
     border-left:5px solid #fff;
     cursor: pointer;
 }
 
 .join-table__between{
-    background-color: #03A9F4;
+    background-color: #96c6ef;
     border-top: none;
     border-left:5px solid #fff;
     border-right:5px solid #fff;

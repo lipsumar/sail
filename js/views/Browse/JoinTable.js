@@ -51,7 +51,7 @@ var Table = Backbone.View.extend({
                 });
             });
 
-            html+='<th class="join-table__add-join">&nbsp;</th>';
+            html+='<th class="join-table__add-join"></th>';
             html+'</tr></thead>';
 
             html+='<tbody>';
