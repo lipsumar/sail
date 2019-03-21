@@ -15,6 +15,10 @@ var Table = Backbone.View.extend({
         this.rows = rows;
     },
 
+    getColumnX(fieldAlias){
+        return this.$(`th[data-alias="${fieldAlias}"]`).position().left;
+    },
+
     render: function(){
         if(this.rows.length === 0){
             this.$el.html(this.noResultMessage);
@@ -24,15 +28,17 @@ var Table = Backbone.View.extend({
 
             html+=`<thead>
                 <tr>
-                    <th class="join-table__table-name" colspan="${baseFields.length+1}">
+                    <th class="join-table__table-name" colspan="${baseFields.length}">
                         ${this.model.table}
                     </th>
+                    <th></th>
             `;
             this.model.joins.forEach(join => {
                 html+=`
-                    <th class="join-table__table-name" colspan="${this.model.getTableFields(join.table).length+1}">
+                    <th class="join-table__table-name" colspan="${this.model.getTableFields(join.table).length}">
                         ${join.table}
-                    </th>`;
+                    </th>
+                    <th></th>`;
             });
             html+=`
                 </tr>
@@ -40,14 +46,14 @@ var Table = Backbone.View.extend({
 
             // fields of base table
             baseFields.forEach(function(field){
-                html+= '<th>'+field.field+'</th>';
+                html+= `<th data-alias="${field.alias}">${field.field}</th>`;
             });
 
             // fields of joins
             this.model.joins.forEach(join => {
                 html+='<th class="join-table__between"></th>';
                 this.model.getTableFields(join.table).forEach(function(field){
-                    html+= '<th>'+field.field+'</th>';
+                    html+= `<th data-alias="${field.alias}">${field.field}</th>`;
                 });
             });
 

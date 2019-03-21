@@ -31,6 +31,10 @@ var BrowseNodeInput = BrowseNodeBase.extend({
         this.$el.find('input').prop('disabled', false);
     },
 
+    getValue(){
+        return this.value;
+    },
+
     render: function(){
         this.setPosition(this.position.x, this.position.y);
 
@@ -46,7 +50,7 @@ var BrowseNodeInput = BrowseNodeBase.extend({
           </div>
 
           <div class="browse-node__bottom">
-            <div class="browse-node-outlet"></div>
+            <div class="browse-node-outlet" data-alias="_main" style="left:26px"></div>
           </div>
         </div>`;
         this.$el.html(html);

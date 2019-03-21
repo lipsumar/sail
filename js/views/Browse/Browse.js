@@ -17,11 +17,19 @@ var Browse = Backbone.View.extend({
         this.contextMenu.on('table-select', this.tableSelected.bind(this));
         this.mouseNode = new MouseNode();
         this.currentEdge = null;
+        $(document).bind('keydown', 'esc', this.onEsc.bind(this));
     },
 
     events: {
         'contextmenu .browse-canvas': 'canvasContextMenu',
         'dblclick .browse-canvas': 'canvasDblClick'
+    },
+
+    onEsc(){
+        if(this.currentEdge){
+            this.currentEdge.remove();
+            this.currentEdge = null;
+        }
     },
 
     canvasContextMenu(e){
@@ -86,8 +94,8 @@ var Browse = Backbone.View.extend({
                 this.addInputNode(node, e.field);
             }
         });
-        node.on('outlet-clicked', node => {
-            this.addEdgeFromOutlet(node);
+        node.on('outlet-clicked', ({node, alias}) => {
+            this.addEdgeFromOutlet(node, alias);
         });
         node.on('remove', () => {
             node.off('outlet-clicked');
@@ -97,8 +105,8 @@ var Browse = Backbone.View.extend({
         this.$('.browse__nodes').append(node.render().el);
     },
 
-    addEdgeFromOutlet(node){
-        var edge = new BrowseEdge({fromNode: node, toNode: this.mouseNode});
+    addEdgeFromOutlet(node, alias){
+        var edge = new BrowseEdge({fromNode: node, fromNodeAlias: alias, toNode: this.mouseNode});
         edge.on('clicked', this.edgeClicked.bind(this));
         this.$('.browse__nodes').append(edge.render().el);
         this.currentEdge = edge;
@@ -119,11 +127,11 @@ var Browse = Backbone.View.extend({
             }
         });
         this.$('.browse__nodes').append(node.render().el);
-        node.on('outlet-clicked', node => {
-            this.addEdgeFromOutlet(node);
+        node.on('outlet-clicked', ({node, alias}) => {
+            this.addEdgeFromOutlet(node, alias);
         });
 
-        var edge = new BrowseEdge({fromNode: node, toNode, toNodeInlet: field});
+        var edge = new BrowseEdge({fromNode: node, fromNodeAlias:'_main', toNode, toNodeInlet: field});
         edge.on('clicked', this.edgeClicked.bind(this));
         this.$('.browse__nodes').append(edge.render().el);
 

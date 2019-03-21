@@ -18,8 +18,9 @@ var BrowseNode = Backbone.View.extend({
         'click .browse-node__close': 'remove'
     },
 
-    onOutletClicked(){
-        this.trigger('outlet-clicked', this);
+    onOutletClicked(e){
+        const alias = e.currentTarget.getAttribute('data-alias');
+        this.trigger('outlet-clicked', {node: this, alias});
     },
 
     startDrag(){
@@ -56,7 +57,7 @@ var BrowseNode = Backbone.View.extend({
         var elPos = $el.position();
         var elWidth = parseInt($el.outerWidth(), 10);
         return {
-            x: pos.x + elPos.left + elWidth/2 + 10,
+            x: pos.x + elPos.left + elWidth/2 + 9,
             y: pos.y + elPos.top
         };
     },
@@ -74,11 +75,11 @@ var BrowseNode = Backbone.View.extend({
         return this.position;
     },
 
-    getOutletPosition(){
-        const width = parseInt(this.$el.outerWidth(), 10);
+    getOutletPosition(alias){
+        const pos = this.$(`.browse-node-outlet[data-alias="${alias}"]`).position();
         const height = parseInt(this.$el.outerHeight(), 10);
         return {
-            x: this.position.x + width/2,
+            x: this.position.x + pos.left + 14,
             y: this.position.y + height
         };
     },

@@ -3,10 +3,9 @@ var Backbone = require('backbone'),
 
 var BrowseEdge = Backbone.View.extend({
     className: 'browse-edge',
-    initialize: function({fromNode, toNode, toNodeInlet}){
+    initialize: function({fromNode, fromNodeAlias, toNode, toNodeInlet}){
         this.fromNode = fromNode;
-
-
+        this.fromNodeAlias = fromNodeAlias;
         this.fromNode.on('move', this.render.bind(this));
         this.fromNode.on('value-updated', (e) => {
             this.trigger('value-updated', e);
@@ -26,11 +25,13 @@ var BrowseEdge = Backbone.View.extend({
 
     remove(){
         this.$el.remove();
-        this.toNode.removeEdge(this.toNodeInlet);
+        if(this.toNode){
+            this.toNode.removeEdge(this.toNodeInlet);
+        }
     },
 
     getValue(){
-        return this.fromNode.value;
+        return this.fromNode.getValue(this.fromNodeAlias);
     },
 
     setToNode(node, field){
@@ -43,7 +44,7 @@ var BrowseEdge = Backbone.View.extend({
     },
 
     render(){
-        var fromPos = this.fromNode.getOutletPosition();
+        var fromPos = this.fromNode.getOutletPosition(this.fromNodeAlias);
         var toPos = this.toNode.getInletPosition(this.toNodeInlet);
         var mostLeft = fromPos.x < toPos.x ? fromPos : toPos;
         var mostTop = fromPos.y < toPos.y ? fromPos : toPos;

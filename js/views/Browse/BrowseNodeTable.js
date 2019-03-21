@@ -69,13 +69,7 @@ var BrowseNodeTable = BrowseNodeBase.extend({
             self.loaded = true;
             self.error = resp.error;
             self.rows = resp.rows;
-            if(resp.rows instanceof Array){
-                self.value = resp.rows.map(r => r.id);
-            }else{
-                self.value = null;
-            }
-
-            self.trigger('value-updated', self.value);
+            self.trigger('value-updated');
         });
     },
 
@@ -99,6 +93,10 @@ var BrowseNodeTable = BrowseNodeBase.extend({
         }
 
         return query;
+    },
+
+    getValue(alias){
+        return this.rows.map(r => r[alias]);
     },
 
     inletAddClicked(e){
@@ -171,6 +169,11 @@ var BrowseNodeTable = BrowseNodeBase.extend({
             <div class="browse-node-inlet__target"></div>
             <div class="browse-node-inlet__name">${field}</div>
           </div>`).join('');
+        var outletsHtml = this.tableJoinModel.getAllFields().map(field => `
+            <div class="browse-node-outlet"
+                data-alias="${field.alias}"
+            ></div>
+        `).join('');
 
         var html = `
         <div class="browse-node__inner">
@@ -192,7 +195,7 @@ var BrowseNodeTable = BrowseNodeBase.extend({
 
           <div class="browse-node__body"></div>
           <div class="browse-node__bottom">
-            <div class="browse-node-outlet"></div>
+            ${outletsHtml}
           </div>
         </div>
         `;
@@ -221,6 +224,16 @@ var BrowseNodeTable = BrowseNodeBase.extend({
         this.joinTable.setRows(this.rows);
         this.$('.browse-node__body').empty().append(this.joinTable.render().el);
         this.$('.browse-node__body').append('<div class="browse-node-table-add-column">+</div>');
+
+        // re-align outlets
+        if(this.rows && this.rows.length>0){
+            this.tableJoinModel.getAllFields().forEach(field => {
+                this.$(`.browse-node-outlet[data-alias="${field.alias}"]`).css({
+                    left: this.joinTable.getColumnX(field.alias)+'px'
+                });
+            });
+        }
+
     }
 });
 

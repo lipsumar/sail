@@ -49,6 +49,21 @@ class TableJoinModel{
         return this.fields[table].map(f => ({field:f, alias:`_t${i}_${f}`}));
     }
 
+    getAllFields(){
+        let allFields = this.getBaseFields().map(f => {
+            f.table = this.table;
+            return f;
+        });
+        this.joins.forEach(join => {
+            const joinFields = this.getTableFields(join.table).map(f => {
+                f.table = join.table;
+                return f;
+            });
+            allFields = allFields.concat(joinFields);
+        });
+        return allFields;
+    }
+
     getQuery(){
         let query = `SELECT ${this.fields[this.table].map(f => `_t.${f}`).join(', ')}`;
 
